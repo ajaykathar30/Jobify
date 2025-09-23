@@ -67,8 +67,11 @@ export const login = async (req, res) => {
             phoneNumber: user.phoneNumber,
             profile: user.profile
         }
-        const token = await jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' })
-        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None',secure:true }).json({ message: `Welcome ${(user.name).toUpperCase()}`, success: true, user })
+
+        const token = jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' })
+        return res.status(200)
+                  .cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None',secure:true })
+                  .json({ message: `Welcome ${(user.name).toUpperCase()}`, success: true, user })
 
     }
 
