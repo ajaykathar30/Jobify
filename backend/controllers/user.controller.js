@@ -11,6 +11,9 @@ export const register = async (req, res) => {
             return res.status(400).json({ message: "please fill out all the fields !! ", success: false })
         }
         const file=req.file 
+        if(!file){
+            return res.status(400).json({success:false, message:"Please upload profile pic"})
+        }
         console.log("Received file in backend:", req.file);
         const fileUri=getDataUri(file)
         const cloudResponse=await cloudinary.uploader.upload(fileUri)

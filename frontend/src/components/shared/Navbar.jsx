@@ -83,7 +83,7 @@ const handleLogout=async (e)=>{
                 <div className='flex mb-2' >
                     <Avatar >
         <AvatarImage  className="rounded-full h-13 cursor-pointer" src={user?.profile?.profilePhoto || "https://github.com/shadcn.png"} alt="@shadcn" />
-        <h1 className='font-bold p-2'>{user.name.toUpperCase()}</h1>
+        <h1 className='font-bold p-2'>{user?.name}</h1>
         {/* src="https://github.com/shadcn.png" */}
         <h1 className='text-muted-foreground'>{user.bio}</h1>
       </Avatar>
