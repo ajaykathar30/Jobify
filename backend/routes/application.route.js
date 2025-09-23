@@ -1,6 +1,5 @@
 import express from 'express'
 import { getApplicants,getApplications,updateApplicationStatus,applyJob } from "../controllers/application.controller.js";
-import { Router } from "express";
 import isAuth from "../middlewares/auth.js";
 
 const router=express.Router()
