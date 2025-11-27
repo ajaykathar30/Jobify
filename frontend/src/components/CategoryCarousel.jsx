@@ -3,14 +3,27 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Button } from './ui/button'
 import { useDispatch } from 'react-redux'
 import { setSearchedQuery } from '@/redux/jobSlice'
-const category=[
-    "Security Guard",
-    "Frontend Developer",
-    "Backend Developer",
-    "Data Scientist",
-    "Graphic Designer",
-    "AI/ML engineer"
-]
+const category = [
+  "Agentic-AI Dev",
+  "Backend Developer",
+  "Data Scientist",
+  "Graphic Designer",
+  "AI/ML Engineer",
+  "Frontend Developer",
+  "Full Stack Developer",
+  "Mobile App Developer",
+  "DevOps Engineer",
+  "Cloud Architect",
+  "Cybersecurity Analyst",
+  "UI/UX Designer",
+  "Product Manager",
+  "Blockchain Developer",
+  "Game Developer",
+  "Content Writer",
+  "Project Manager",
+  "Embedded Systems Engineer",
+];
+
 import {useNavigate} from "react-router-dom"
 const CategoryCarousel = () => {
     const navigate=useNavigate()
@@ -22,7 +35,7 @@ const CategoryCarousel = () => {
 
   return (
     <div> 
-        <Carousel className="w-full max-w-xl mx-auto my-20">
+        <Carousel className="w-full max-w-xl mx-auto mt-10 mb-10">
 <CarouselContent>
 
                     {

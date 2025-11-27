@@ -60,7 +60,7 @@ const CompanyCreate = () => {
                 <Button  className='cursor-pointer' onClick={handleContinue}>Continue</Button>
         </div>
         </div>
-        <ToastContainer/>
+
 
     </div>
   )

@@ -109,7 +109,7 @@ const CompanySetup = () => {
 
             </div>
             </WavyBackground>
-                        <ToastContainer/>
+
         </>
     )
 }

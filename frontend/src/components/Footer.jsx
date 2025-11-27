@@ -1,99 +1,58 @@
-import React from "react";
+import React from 'react'
 
 const Footer = () => {
-  return (
-    <footer className="bg-white pb-5 pt-10 dark:bg-dark">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap -mx-4">
-          {/* Logo & Description */}
-          <div className="w-full px-4 sm:w-2/3 lg:w-3/12 mb-10">
-            <a href="/" className="mb-6 inline-block max-w-[160px]">
-              <img
-                src="/logoWithName.png"
-                alt="logo"
-                className="max-w-full dark:hidden"
-              />
-            </a>
-            <p className="mb-4 text-base text-body-color dark:text-dark-6">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            </p>
-            <p className="text-sm font-medium text-dark dark:text-white">
-              +012 (345) 678 99
-            </p>
-          </div>
+  return  (
+    <footer className="bg-gray-900 text-gray-300 py-10 mt-10">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
 
-          {/* Link Groups */}
-          <LinkGroup header="Resources">
-            <NavLink link="#" label="SaaS Development" />
-            <NavLink link="#" label="Our Products" />
-            <NavLink link="#" label="User Strategy" />
-          </LinkGroup>
+        {/* Brand */}
+        <div>
+          <h2 className="text-2xl font-semibold text-white">Jobify</h2>
+          <p className="mt-2 text-sm">
+            Your gateway to better career opportunities. Find your dream job with ease.
+          </p>
+        </div>
 
-          <LinkGroup header="Company">
-            <NavLink link="#" label="About Jobify" />
-            <NavLink link="#" label="Contact & Support" />
-            <NavLink link="#" label="Success History" />
-            <NavLink link="#" label="Privacy Policy" />
-          </LinkGroup>
+        {/* Quick Links */}
+        <div>
+          <h3 className="text-lg font-semibold text-white mb-4">Quick Links</h3>
+          <ul className="space-y-2 text-sm">
+            <li className="hover:text-white cursor-pointer">Home</li>
+            <li className="hover:text-white cursor-pointer">Browse Jobs</li>
+            <li className="hover:text-white cursor-pointer">Companies</li>
+            <li className="hover:text-white cursor-pointer">Contact</li>
+          </ul>
+        </div>
 
-          <LinkGroup header="Quick Links">
-            <NavLink link="#" label="Premium Support" />
-            <NavLink link="#" label="Our Services" />
-            <NavLink link="#" label="Meet Our Team" />
-          </LinkGroup>
+        {/* Resources */}
+        <div>
+          <h3 className="text-lg font-semibold text-white mb-4">Resources</h3>
+          <ul className="space-y-2 text-sm">
+            <li className="hover:text-white cursor-pointer">Blog</li>
+            <li className="hover:text-white cursor-pointer">Career Tips</li>
+            <li className="hover:text-white cursor-pointer">FAQs</li>
+            <li className="hover:text-white cursor-pointer">Support</li>
+          </ul>
+        </div>
 
-          {/* Social */}
-          <div className="w-full px-4 sm:w-1/2 lg:w-3/12 mb-10">
-            <h4 className="mb-4 text-lg font-semibold text-dark dark:text-white">
-              Follow Us On
-            </h4>
-            <div className="flex space-x-3 mb-4">
-              <SocialLink label="Facebook" />
-              <SocialLink label="Twitter" />
-              <SocialLink label="YouTube" />
-              <SocialLink label="LinkedIn" />
-            </div>
-            <p className="text-base text-body-color dark:text-dark-6">
-              &copy; 2025 Jobify
-            </p>
-          </div>
+        {/* Social */}
+        <div>
+          <h3 className="text-lg font-semibold text-white mb-4">Follow Us</h3>
+          <ul className="space-y-2 text-sm">
+            <li className="hover:text-white cursor-pointer">LinkedIn</li>
+            <li className="hover:text-white cursor-pointer">Twitter</li>
+            <li className="hover:text-white cursor-pointer">Instagram</li>
+            <li className="hover:text-white cursor-pointer">Facebook</li>
+          </ul>
         </div>
       </div>
+
+      {/* Bottom */}
+      <div className="border-t border-gray-700 mt-8 pt-4 text-center text-sm">
+        © {new Date().getFullYear()} Jobify. All rights reserved.
+      </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
-
-// Link Group
-const LinkGroup = ({ children, header }) => (
-  <div className="w-full px-4 sm:w-1/2 lg:w-2/12 mb-10">
-    <h4 className="mb-4 text-lg font-semibold text-dark dark:text-white">
-      {header}
-    </h4>
-    <ul className="space-y-2">{children}</ul>
-  </div>
-);
-
-// Navigation Link
-const NavLink = ({ link, label }) => (
-  <li>
-    <a
-      href={link}
-      className="text-base text-body-color hover:text-primary dark:text-dark-6"
-    >
-      {label}
-    </a>
-  </li>
-);
-
-// Social Icon Placeholder
-const SocialLink = ({ label }) => (
-  <a
-    href="#"
-    className="flex h-8 w-8 items-center justify-center rounded-full border border-stroke text-dark hover:bg-primary hover:text-white dark:border-dark-3 dark:text-white"
-    title={label}
-  >
-    <span className="text-sm">{label[0]}</span>
-  </a>
-);
+export default Footer

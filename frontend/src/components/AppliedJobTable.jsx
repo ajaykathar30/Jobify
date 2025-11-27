@@ -28,17 +28,11 @@ const AppliedJobTable = () => {
    
   return (
     <>
-    <div className="relative w-full my-6 rounded-xl p-2">
-     <GlowingEffect
-          spread={40}
-          glow={true}
-          disabled={false}
-          proximity={65}
-          inactiveZone={0.01}
-        />
+    <div className="relative w-full my-6 rounded-xl p-2 bg-">
+    
        
        <h1 className='font-bold text-xl my-2'>Applied Jobs</h1>
-          <table className='w-4/5 border-separate border-spacing-y-1'>
+          <table className='w-4/5 border-1 rounded-2xl'>
           <thead>
                <tr>
 
@@ -52,7 +46,7 @@ const AppliedJobTable = () => {
                {
                     applications.map((item,idx)=>(
                         
-            <tr className='text-center ' key={item._id}>
+            <tr className='text-center '  key={item._id}>
                  <td className='p-2 font-poppins font-bold'>{item?.createdAt?.split('T')[0]}</td>
                  <td className='p-2 font-poppins font-bold'>{item?.job?.title}</td>
                  <td className='p-2 font-poppins font-bold '>{item?.job?.company?.name}</td>

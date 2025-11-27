@@ -7,6 +7,8 @@ import {useNavigate} from "react-router-dom"
 import { PinIcon } from 'lucide-react';
 import { MapPinCheck } from 'lucide-react';
 import { MapPin } from 'lucide-react';
+import { BriefcaseBusiness } from 'lucide-react';
+import { IndianRupee } from 'lucide-react';
 // import { AvatarImage } from '@radix-ui/react-avatar'
 // const JobId="qrefsvxf3wrsdfb"
 const Job = ({job}) => {
@@ -19,41 +21,45 @@ const Job = ({job}) => {
   const diff=daysAgo(job?.createdAt)
   const navigate=useNavigate()
   return (
-    <div className='border shadow-md px-5 py-1 rounded-xl bg-gray-100 hover:shadow-xl'>
+    <div onClick={()=>navigate(`/description/${job._id}`) } className='border shadow-md px-5 py-1 rounded-xl bg-white hover:shadow-xl'>
         <div className='flex justify-between items-center'>
 
-     <p>{
+     <p className='text-xs my-1'>{
    
             diff==='0'?"Today":`${diff} days ago`
      } </p>
-     <Button variant='outline' className='rounded-full' size='icon'><Bookmark/></Button>
+
         </div>
      <div className='flex gap-2 items-center'>
-    <Button size='icon' variant='outline' >
+    {/* <Button className="h-30 w-auto" variant='outline' >
         <Avatar>
             <AvatarImage src={job?.company?.logo ||"/cl.png"}/>
         </Avatar>
-     </Button>
-     <div className='p-2'>
-        <h1 className='font-poppins text-xl'>{job?.company?.name}</h1>
+     </Button> */}
+     <img src={job?.company?.logo ||"/cl.png"} alt="companyLogo" srcset=""  className='h-15 w-15 border-2 rounded-xl'/>
+     <div className='p-2 space-y-1  w-full'>
+        {/* <h1 className='font-poppins text-xl'>{job?.company?.name}</h1> */}
+        <h1 className='text-xl  '>{job?.title}</h1>
 
         
-        <p className='font-poppins text-muted-foreground text-sm'>{job?.location}</p>
+        {/* <p className='font-poppins text-muted-foreground text-sm'>{job?.company?.name}</p> */}
+        <div className='flex space-x-2'>
+          <p className='font-bold'>{job?.company?.name}</p>
+          <Badge className=' bg-sky-100  text-black'>{job?.jobType}</Badge>
+          
+          </div>
 
      </div>
      </div>
      <div>
-        <p className='font-bold p-3'>{job?.title}</p>
-        <p className='text-muted-foreground'>{job?.description}</p>
+        {/* <p className='font-bold p-3'>{job?.location}</p> */}
+        <p className='text-sm text-muted-foreground'>{job?.description.slice(0,100)+"..."}</p>
      </div>
-    <div className='flex gap-2 my-5 font-poppins'>
-        <Badge className='text- bg-emerald-400 text-white '>{job?.vacancy} POSITIONS</Badge>
-            <Badge className='text- bg-sky-500 text-white'>{job?.jobType}</Badge>
-            <Badge className='text- bg-green-600 text-white'>{job?.salary} LPA</Badge>
-    </div>
-        <div className='flex gap-2 my-3'>
-        <Button variant='outline'  onClick={()=>navigate(`/description/${job._id}`) }>Details</Button>
-        <Button>Save for later</Button>
+    <div className='flex gap-2 my-2 font-poppins'>
+        <Badge className='text- bg-emerald-200 text-black  '><BriefcaseBusiness /> {job?.vacancy} POSITIONS</Badge>
+            <Badge className='text- bg-sky-200 text-black'><MapPin />{job?.location}</Badge>
+            <Badge className='text- bg-teal-200 text-black'><IndianRupee />{job?.salary} LPA</Badge>
+            {/* <Badge className='text- bg-green-600 text-white'>{job?.location}</Badge> */}
     </div>
     </div>
   )

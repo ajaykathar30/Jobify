@@ -48,15 +48,15 @@ const handleLogout=async (e)=>{
           {
             user && user.role==='recruiter'?(
               <>
-             <Button variant="link"className={`${location.pathname==='/admin/companies'?'underline underline-offset-4':""} text-md text-black`}><Link to="/admin/companies">Companies</Link></Button>
-<Button variant="link" className={`${location.pathname==='/admin/jobs'?'underline underline-offset-4':""} text-md text-black`}><Link to='/admin/jobs'>Jobs</Link></Button>
+             <Button variant="link"className={`${location.pathname==='/admin/companies'?'underline underline-offset-4':""} text-md text-black font-bold font-bold `}><Link to="/admin/companies">Companies</Link></Button>
+<Button variant="link" className={`${location.pathname==='/admin/jobs'?'underline underline-offset-4':""} text-md text-black font-bold`}><Link to='/admin/jobs'>Jobs</Link></Button>
         
               </>):(
                 <>
- <Button variant="link" className={`${location.pathname==='/'?'underline underline-offset-4':""} text-md text-black`}><Link to='/'>Home</Link>
+ <Button variant="link" className={`${location.pathname==='/'?'underline underline-offset-4':""} text-md text-black font-bold`}><Link to='/'>Home</Link>
                 </Button>
-             <Button variant="link" className={`${location.pathname==='/jobs'?'underline underline-offset-4':""} text-md text-black`}><Link to="/jobs">Jobs</Link></Button>
-             <Button variant="link" className={`${location.pathname==='/browse'?'underline underline-offset-4':""} text-md text-black`}><Link to='/browse'>Browse</Link></Button>
+             <Button variant="link" className={`${location.pathname==='/jobs'?'underline underline-offset-4':""} text-md text-black font-bold`}><Link to="/jobs">Jobs</Link></Button>
+             <Button variant="link" className={`${location.pathname==='/browse'?'underline underline-offset-4':""} text-md text-black font-bold`}><Link to='/browse'>Browse</Link></Button>
        
                 </>
               )

@@ -8,13 +8,13 @@ const LatestJob = () => {
   const navigate=useNavigate()
   return (
     <>
-   <div className='mt-10 pb-10' >
+   <div className='mt-10 pb-10 ' >
 
-    <div className='bg-[url("/brushBb.png")] bg-cover bg-center w-fit mb-10 '>
-      <h1 className='text-left sm:text-2xl lg:text-3xl uppercase font-black italic mx-10 text-white  leading-normal'>
+    <div className='m-auto  mb-10 w-6xl '>
+      
+      <h1 className='text-left sm:text-2xl lg:text-3xl uppercase font-black italic leading-normal'>
         Latest Job Openings
       </h1>
-      
     </div>
     <div className='grid grid-cols-3 m-auto w-4/5 gap-10'>
 

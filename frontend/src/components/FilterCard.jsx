@@ -1,77 +1,86 @@
-import React from 'react'
-import Job from './Job'
+import React, { useEffect, useState } from 'react'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 import { Label } from './ui/label'
-import { useState } from 'react'
-import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { setSearchedQuery } from '@/redux/jobSlice'
-import { Button } from './ui/button'
 
-
-
-const filterData=[
-    {
-        filterType:'Location',
-        array:['Mumbai','Bangalore','Hyderabad','Pune','Delhi']
-    },
-    {
-        filterType:'Industry',
-        array:['frontend','backend','security guard','AI/ML engineer']
-    },
-    {
-        filterType:'Salary',
-        array:['0-5 LPA','6-11 LPA','12-25 LPA']
-    },
+const filterData = [
+  {
+    filterType: 'Location',
+    array: ['Bangalore', 'Hyderabad', 'Pune', 'Delhi','Mumbai'],
+  },
+  {
+    filterType: 'Industry',
+    array: [ 'AI/ML engineer','frontend', 'backend', 'AgenticAI-dev',],
+  },
+  {
+    filterType: 'Salary',
+    array: ['0-5 LPA', '6-11 LPA', '12-25 LPA'],
+  },
 ]
+
 const FilterCard = () => {
-    const dispatch=useDispatch()
-    const [selectedValue, setselectedValue] = useState("")
-    const handleChange=(value)=>{
-        setselectedValue(value)
-    }
-useEffect(() => {
- console.log(selectedValue)
- dispatch(setSearchedQuery(selectedValue))
-}, [selectedValue])
+  const dispatch = useDispatch()
+  const [selectedValue, setSelectedValue] = useState('')
+
+  const handleChange = (value) => {
+    setSelectedValue(value)
+  }
+
+  useEffect(() => {
+    dispatch(setSearchedQuery(selectedValue))
+  }, [selectedValue])
 
   return (
-    <div className=''>
-            
-        <div className='bg-[url("/brushBb.png")] bg-cover bg-center w-fit '>
+<div className="w-full md:w-[240px] bg-white border border-gray-200 rounded-xl shadow-sm p-5 sticky top-24 h-fit">
 
-      <h1 className='text-left uppercase font-black italic mx-10 text-white  leading-normal'>
-        Filter Jobs
-      </h1>
       
-    </div>
-        <RadioGroup value={selectedValue} onValueChange={handleChange}>
+      {/* Heading */}
+    <h1 className="text-lg font-bold tracking-wide text-gray-800 mb-4">
+       Filters
+      </h1>
 
-        {
-            filterData.map((data,index)=>(
-                <div className='my-2' key={index}>
 
-                <h1 className='text-muted-foreground font-poppins'>{data.filterType}</h1>
-                {
-                    
-                    data.array.map((item,idx)=>{
-                        const itemId=`r${index}-${idx }`
-                        return (
-                           <div className='flex p-1.5 gap-2 my-1 ' key={idx}>
-                            <RadioGroupItem value={item} id={itemId}/>
-                            <Label htmlFor={itemId} className='font-bold'>{item}</Label>
-                           </div>
-                        )
-                    })
-                    }
+      {/* Radio Filters */}
+      <RadioGroup value={selectedValue} onValueChange={handleChange}>
 
-                    </div>
+        {filterData.map((data, index) => (
+          <div className="mb-5" key={index}>
 
-            ))
-            
-        }
-        </RadioGroup>
-<Button onClick={()=>location.reload()} className='cursor-pointer'>Get all Jobs</Button>
+            {/* Section Title */}
+            <h2 className="text-sm text-gray-500 font-semibold uppercase mb-2">
+              {data.filterType}
+            </h2>
+
+            {/* Radio Options */}
+            {data.array.map((item, idx) => {
+              const itemId = `r${index}-${idx}`
+              return (
+                <div className="flex items-center gap-2 py-1" key={idx}>
+                  <RadioGroupItem value={item} id={itemId} />
+                  <Label
+                    htmlFor={itemId}
+                    className="text-gray-800 cursor-pointer"
+                  >
+                    {item}
+                  </Label>
+                </div>
+              )
+            })}
+
+          </div>
+        ))}
+
+      </RadioGroup>
+
+      {/* Reset Button */}
+      {/* <Button
+        onClick={() => location.reload()}
+        className="w-full mt-2"
+        variant="outline"
+      >
+        Reset Filters
+      </Button> */}
     </div>
   )
 }

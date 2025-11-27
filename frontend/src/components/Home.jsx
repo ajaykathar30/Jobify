@@ -4,11 +4,12 @@ import HeroSection from './HeroSection'
 import CategoryCarousel from './CategoryCarousel'
 import LatestJob from './LatestJob'
 import Footer from './Footer'
-import Timepass from './Timepass'
+
 import useGetAllJob from './hooks/useGetAllJob'
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Testimonials from './Testimonials'
 
 
 const Home = () => {
@@ -27,9 +28,10 @@ const Home = () => {
       <Navbar/>
       <HeroSection/>
       <CategoryCarousel/>
-
       <LatestJob/>
-<Footer/>
+      <Testimonials/>
+
+      <Footer/>
       {/* <Timepass/> */}
     </div>
   )

@@ -1,7 +1,6 @@
 import { Slash, Search } from 'lucide-react';
 import React from 'react';
 import { Button } from './ui/button';
-import { Vortex } from './ui/vortex';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setSearchedQuery } from '@/redux/jobSlice';
@@ -16,7 +15,7 @@ const handleSearch=async ()=>{
 }
   return (
     <>
-      <div className="bg-emerald-300 py-16 px-4">
+      <div className="bg-emerald-300 py-16 px-4 mb-[-27px]">
        
         <h1 className="text-center text-3xl sm:text-4xl lg:text-6xl uppercase font-black italic text-black leading-tight ">
           Your dream job ,<br /> just a click away!
@@ -24,7 +23,7 @@ const handleSearch=async ()=>{
 
       </div>
 
-      <div className="relative box -mt-8 px-4">
+      <div className="relative  px-4  ">
         <div className="bg-gray-50   shadow-md rounded-2xl flex flex-col md:flex-row items-center gap-4 p-4 max-w-4xl mx-auto w-full">
           <div className="flex items-center gap-2 w-full md:w-auto">
             <Search className="text-gray-600" />

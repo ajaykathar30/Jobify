@@ -11,8 +11,6 @@ import AppliedJobTable from './AppliedJobTable'
 import { useState } from 'react'
 import UpdateProfileDialog from './UpdateProfileDialog'
 import { useSelector } from 'react-redux'
-import { GlareCard } from './ui/glare-card'
-import { GlowingEffect } from './ui/glowing-effect'
 
 const resume=true
 const skills=['Html','Css','JavaScipt']
@@ -24,28 +22,14 @@ const Profile = () => {
   return (
     <div>
       <Navbar/>
-      <div className='max-w-7xl m-auto my-3'>
-
-       <div className='bg-[url("/brushBb.png")] bg-cover bg-center w-fit  '>
-      <h1 className='text-center text-3xl uppercase font-black italic mx-10 text-white  leading-normal'>
-        Profile
-      </h1>
-      </div>
-
-    </div>
+     
       
         
 
       {/* <div>{user?.name}</div> */}
 
       <div className=" relative max-w-5xl m-auto rounded-3xl my-5 p-8   bg-gray-100 shadow-2xl">
-      <GlowingEffect
-        spread={40}
-          glow={true}
-          disabled={false}
-          proximity={65}
-          inactiveZone={0.01}/>
-
+    
        
 
         <div className='flex justify-between'>

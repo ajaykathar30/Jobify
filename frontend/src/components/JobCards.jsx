@@ -21,11 +21,14 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setAlljobs } from '@/redux/jobSlice'
 import {Link} from 'react-router-dom'
+import { BriefcaseBusiness } from 'lucide-react'
+import { IndianRupee } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 
 const JobCards = ({job}) => {
    
-
+const navigate=useNavigate();
   // const [first, setfirst] = useState(second)
   return (
 //     <CardContainer className="inter-var w-full max-w-sm">
@@ -89,25 +92,62 @@ const JobCards = ({job}) => {
 //       </CardBody>
 //     </CardContainer>
   
-    <Link to={`/description/${job._id}`} className='w-full   max-w-sm shadow-sm p-3 rounded-xl hover:shadow-xl cursor-pointer bg-gray-50'>
-        <h1 className='text-xl '>{job?.company?.name}</h1>
-        <div className='flex justify-start items-center gap-1 p-2'>
-<MapPin className='text-muted-foreground'/>
-        <p className='text-muted-foreground'>{job?.location}</p>
-        </div>
-        <div >
-            <h1 className='text-md font-bold p-1 font-poppins'>{job.title}</h1>
-            <p className='p-2 text-muted-foreground font-poppins text-sm'>{job.description} </p>
-            <div className="flex w-full flex-wrap gap-2 my-2">
-            <Badge className='text- bg-emerald-400 text-white'>{job.vacancy} POSITIONS</Badge>
-            <Badge className='text- bg-sky-500 text-white'>{job.jobType}</Badge>
-            <Badge className='text- bg-green-600 text-white'>{job.salary}LPA</Badge>
-      </div>
+//     <Link to={`/description/${job._id}`} className='w-full   max-w-sm shadow-sm p-3 rounded-xl hover:shadow-xl cursor-pointer bg-white border-1 '>
+//         <h1 className='text-xl '>{job?.company?.name}</h1>
 
-        </div>
+//      <img src={job?.company?.logo ||"/cl.png"} alt="companyLogo" srcset=""  className='h-15 w-15 border-2 rounded-xl'/>
+    
+//         <div className='flex justify-start items-center gap-1 p-2'>
+// <MapPin className='text-muted-foreground'/>
+//         <p className='text-muted-foreground'>{job?.location}</p>
+//         </div>
+//         <div >
+//             <h1 className='text-md font-bold p-1 font-poppins'>{job.title}</h1>
+//             <p className='p-2 text-muted-foreground font-poppins text-sm'> {job.description.length > 100? job.description.slice(0, 100) + "...": job.description} </p>
+//             <div className="flex w-full flex-wrap gap-2 my-2">
+//             <Badge className='text- bg-emerald-400 text-white'>{job.vacancy} POSITIONS</Badge>
+//             <Badge className='text- bg-sky-500 text-white'>{job.jobType}</Badge>
+//             <Badge className='text- bg-green-600 text-white'>{job.salary}LPA</Badge>
+//       </div>
+
+//         </div>
       
-    </Link>
-  )
-}
+//     </Link>
+    
+   <div onClick={()=>navigate(`/description/${job._id}`) } className='border shadow-md px-5 py-1 rounded-xl bg-white hover:shadow-xl'>
+      
+     <div className='flex gap-2 items-center'>
+    {/* <Button className="h-30 w-auto" variant='outline' >
+        <Avatar>
+            <AvatarImage src={job?.company?.logo ||"/cl.png"}/>
+        </Avatar>
+     </Button> */}
+     <img src={job?.company?.logo ||"/cl.png"} alt="companyLogo" srcset=""  className='h-15 w-15 border-2 rounded-xl'/>
+     <div className='p-2 space-y-1  w-full'>
+        {/* <h1 className='font-poppins text-xl'>{job?.company?.name}</h1> */}
+        <h1 className='text-xl  '>{job?.title}</h1>
+
+        
+        {/* <p className='font-poppins text-muted-foreground text-sm'>{job?.company?.name}</p> */}
+        <div className='flex space-x-2'>
+          <p className='font-bold'>{job?.company?.name}</p>
+          <Badge className=' bg-sky-100  text-black'>{job?.jobType}</Badge>
+          
+          </div>
+
+     </div>
+     </div>
+     <div>
+        {/* <p className='font-bold p-3'>{job?.location}</p> */}
+        <p className='text-sm text-muted-foreground'>{job?.description.slice(0,100)+"..."}</p>
+     </div>
+    <div className='flex gap-2 my-2 font-poppins'>
+        <Badge className='text- bg-emerald-200 text-black  '><BriefcaseBusiness /> {job?.vacancy} POSITIONS</Badge>
+            <Badge className='text- bg-sky-200 text-black'><MapPin />{job?.location}</Badge>
+            <Badge className='text- bg-teal-200 text-black'><IndianRupee />{job?.salary} LPA</Badge>
+            {/* <Badge className='text- bg-green-600 text-white'>{job?.location}</Badge> */}
+    </div>
+    </div>
+)}
 
 export default JobCards
