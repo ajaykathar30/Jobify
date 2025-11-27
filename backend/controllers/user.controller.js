@@ -16,7 +16,7 @@ export const register = async (req, res) => {
         }
         console.log("Received file in backend:", req.file);
         const fileUri=getDataUri(file)
-        const cloudResponse=await cloudinary.uploader.upload(fileUri)
+        const cloudResponse=await cloudinary.uploader.upload(fileUri,{resource_type: "raw"})
 
         const user = await User.findOne({ email })
         if (user) {
@@ -105,7 +105,7 @@ export const updateProfile = async (req, res) => {
         if(file){
             try {
         fileUri = getDataUri(file);
-        cloudResponse = await cloudinary.uploader.upload(fileUri);
+        cloudResponse = await cloudinary.uploader.upload(fileUri,{resource_type: "raw"});
     } catch (cloudErr) {
         console.error("Cloudinary error:", cloudErr);
         return res.status(500).json({ message: "Error uploading file", success: false });
