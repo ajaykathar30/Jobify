@@ -13,29 +13,25 @@ const JobDescription = () => {
     // --- YOUR EXACT LOGIC STARTS HERE ---
     const params = useParams();
     const id = params.id;
-    // console.log(id)
     const { singleJob } = useSelector(store => store.job);
     const dispatch = useDispatch();
     const { user } = useSelector(store => store.auth);
+    
     const isInitiallyApplied = singleJob?.applications?.some((application) => application.applicant === user?._id) || false;
     const [isApplied, setisApplied] = useState(isInitiallyApplied);
 
     const handleApply = async () => {
         try {
-            // console.log('hi')
             const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${id}`, { withCredentials: true })
-            // console.log(res.data)
             if (res.data.success) {
                 setisApplied(true)
                 const updatedSingleJob = { ...singleJob, applications: [...singleJob.applications, { applicant: user.id }] }
                 dispatch(setSinglejob(updatedSingleJob))
                 toast.success(res.data.message)
-
             }
             else {
                 toast.error(res.data.message)
             }
-
         } catch (error) {
             console.log(error)
             toast.error(error.response.data.message)
@@ -47,13 +43,9 @@ const JobDescription = () => {
             try {
                 const res = await axios.get(`${JOB_API_END_POINT}/get/${id}`, { withCredentials: true })
                 if (res.data.success) {
-                    console.log(user?._id)
                     dispatch(setSinglejob(res.data.job))
                     setisApplied(res.data.job.applications.some((application) => application.applicant === (user?._id)))
                 }
-                const Job = res.data.job
-                // setjobs(Job)
-                console.log(Job)
             } catch (error) {
                 console.log(error)
             }
@@ -62,7 +54,8 @@ const JobDescription = () => {
     }, [id, dispatch, user?._id])
     // --- YOUR LOGIC ENDS HERE ---
 
-    // --- NEW MODERN DESIGN STARTS HERE ---
+
+    // --- MODERN EMERALD DESIGN ---
     if (!singleJob) {
         return (
             <>
@@ -77,57 +70,98 @@ const JobDescription = () => {
     return (
         <div className="bg-gray-50 min-h-screen pb-12">
             <Navbar />
-            {/* Main Content Container */}
-            <div className='max-w-4xl mx-auto mt-10'>
+            
+            <div className='max-w-4xl mx-auto mt-10 px-4 sm:px-0'>
+                
+                {/* 1. HEADER CARD: Title, Company Info, and Apply Button */}
+                <div className='bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6'>
+                    
+                    {/* Left Side: Logo + Text */}
+                    <div className="flex gap-4 items-start">
+                        {/* Company Logo */}
+                        <div className="h-16 w-16 rounded-xl border border-gray-100 shadow-sm overflow-hidden flex-shrink-0 bg-white">
+                            <img 
+                                src={singleJob?.company?.logo} 
+                                alt={singleJob?.company?.name} 
+                                className="h-full w-full object-contain p-1"
+                            />
+                        </div>
 
-                {/* Job Header Card */}
-                <div className='bg-white rounded-2xl shadow-sm border border-gray-100 p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6'>
-                    <div>
-                        <h1 className='text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight'>{singleJob.title}</h1>
+                        {/* Text Details */}
+                        <div>
+                            <h1 className='text-3xl font-extrabold text-gray-900 tracking-tight leading-tight'>
+                                {singleJob.title}
+                            </h1>
+                            <div className='flex items-center gap-2 mt-1'>
+                                <span className='text-emerald-600 font-semibold text-lg'>
+                                    {singleJob?.company?.name}
+                                </span>
+                                <span className="text-gray-400 hidden sm:inline">•</span>
+                                <span className='text-gray-500 text-sm hidden sm:inline'>
+                                    {singleJob.location}
+                                </span>
+                            </div>
 
-                        {/* Badges Section */}
-                        <div className='flex flex-wrap items-center gap-3 my-5'>
-                            <Badge variant="secondary" className='bg-teal-50 text-teal-700 hover:bg-teal-100 border-teal-200 px-3 py-1 text-sm'>
-                                {singleJob.vacancy} positions
-                            </Badge>
-                            <Badge variant="secondary" className='bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-200 px-3 py-1 text-sm'>
-                                ₹ {singleJob.salary} LPA
-                            </Badge>
-                            <Badge variant="secondary" className='bg-cyan-50 text-cyan-700 hover:bg-cyan-100 border-cyan-200 px-3 py-1 text-sm'>
-                                {singleJob.jobType}
-                            </Badge>
+                            {/* Badges */}
+                            <div className='flex flex-wrap items-center gap-3 mt-4'>
+                                <Badge variant="secondary" className='bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-200 px-3 py-1 text-sm rounded-full'>
+                                    {singleJob.vacancy} positions
+                                </Badge>
+                                <Badge variant="secondary" className='bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-200 px-3 py-1 text-sm rounded-full'>
+                                    ₹ {singleJob.salary} LPA
+                                </Badge>
+                                <Badge variant="secondary" className='bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-200 px-3 py-1 text-sm rounded-full'>
+                                    {singleJob.jobType}
+                                </Badge>
+                            </div>
                         </div>
                     </div>
 
-                    {/* Apply Button Section */}
-                    <div className="flex-shrink-0">
+                    {/* Right Side: Apply Button */}
+                    <div className="flex-shrink-0 w-full md:w-auto mt-4 md:mt-0">
                         {isApplied ? (
-                            <Button disabled className='bg-gray-300 text-gray-600 cursor-not-allowed px-8 py-3 text-lg rounded-full font-semibold'>
+                            <Button disabled className='w-full md:w-auto bg-gray-300 text-gray-600 cursor-not-allowed px-8 py-3 text-lg rounded-full font-semibold'>
                                 Already Applied
                             </Button>
                         ) : (
-                            <Button onClick={handleApply} className='bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 text-lg rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg'>
+                            <Button onClick={handleApply} className='w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 text-lg rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-emerald-200'>
                                 Apply Now
                             </Button>
                         )}
                     </div>
                 </div>
 
-                {/* Job Details Card */}
-                <div className='bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mt-6'>
-                    <h2 className='text-xl font-bold text-gray-900 mb-6'>Job Overview</h2>
-
+                {/* 2. JOB DETAILS CARD */}
+                <div className='bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 mt-6'>
+                    <h2 className='text-xl font-bold text-gray-900 mb-6 flex items-center gap-2'>
+                        Job Overview
+                    </h2>
+                    
                     {/* Metadata Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-4 mb-8 pb-8 border-b border-gray-100">
+                        <DetailItem label="Role" value={singleJob.title} />
                         <DetailItem label="Location" value={singleJob.location} />
+                        <DetailItem label="Experience" value={`${singleJob.experienceLevel} Years`} />
                         <DetailItem label="Salary" value={`${singleJob.salary} LPA`} />
-                        <DetailItem label="Job Type" value={singleJob.jobType} />
+                        <DetailItem label="Applicants" value={singleJob?.applications?.length || 0} />
                         <DetailItem label="Posted Date" value={singleJob?.createdAt?.split('T')[0] || 'N/A'} />
-                        <DetailItem label="Positions" value={singleJob.vacancy} />
-                        <DetailItem label="Total Applicants" value={singleJob?.applications?.length || 0} />
                     </div>
 
-                    {/* Full Description */}
+                    {/* Requirements Section (Added since you have the data) */}
+                    {singleJob.requirements && (
+                        <div className="mb-8">
+                            <h2 className='text-xl font-bold text-gray-900 mb-4'>Requirements</h2>
+                            <div className="flex flex-wrap gap-2">
+                                {singleJob.requirements.split(',').map((req, idx) => (
+                                    <span key={idx} className="bg-emerald-50 text-emerald-700 font-medium px-3 py-1 rounded-lg text-sm border border-emerald-100">
+                                        {req.trim()}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Description Section */}
                     <div>
                         <h2 className='text-xl font-bold text-gray-900 mb-4'>Job Description</h2>
                         <div className='text-gray-700 leading-relaxed whitespace-pre-line font-poppins'>
@@ -140,7 +174,7 @@ const JobDescription = () => {
     );
 };
 
-// Helper component for grid items to reduce repetition
+// Helper component
 const DetailItem = ({ label, value }) => (
     <div className="flex flex-col">
         <span className='text-sm text-muted-foreground font-medium mb-1'>{label}</span>
