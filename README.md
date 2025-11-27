@@ -1,7 +1,9 @@
-
 # Jobify 🚀
 
-![Jobify Banner](https://via.placeholder.com/1000x300?text=Jobify+Job+Portal)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/92f959d6-a0a2-4d6b-b9b2-8c09c3ebebaf" alt="Jobify Dashboard" width="75%">
+</p>
+
 [![Deployment Status](https://img.shields.io/badge/Deployment-Live-success?style=for-the-badge&logo=render)](https://jobify-frontend-4lxx.onrender.com)
 [![Tech Stack](https://img.shields.io/badge/MERN-Stack-blue?style=for-the-badge&logo=react)](https://react.dev)
 
@@ -29,6 +31,18 @@ Check out the live application here: **[Jobify Live Link](https://jobify-fronten
 * **Secure Authentication:** User login and signup (Recruiter/Student).
 * **Modern UI:** Built with **Shadcn UI** for a clean, accessible, and responsive design.
 * **Real-time Feedback:** Toast notifications for user actions.
+
+---
+
+## 📸 Screenshots
+
+Here is a glimpse of the application in action:
+
+| Testimonials | Job Description |
+|:---:|:---:|
+| ![Testimonials](https://github.com/user-attachments/assets/cc6620df-d652-44f6-9941-3ce0c3c88ba3) | ![Job Details](https://github.com/user-attachments/assets/825ee18c-4699-4363-b9a2-94b243f9d801) |
+| **Job Description** | **User Profile** |
+| ![Job description](https://github.com/user-attachments/assets/b648d5be-2412-4c07-b945-f917b507157c) | ![Profile](https://github.com/user-attachments/assets/1bc6249f-2e3c-44f9-bb49-79f5ae3c961c) |
 
 ---
 
@@ -60,5 +74,5 @@ Make sure you have **Node.js** installed on your system.
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/ajaykathar30/Jobify](https://github.com/ajaykathar30/Jobify)
-cd jobify
+git clone https://github.com/ajaykathar30/Jobify.git
+cd Jobify
