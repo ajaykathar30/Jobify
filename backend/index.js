@@ -10,8 +10,8 @@ import applicationRoute from './routes/application.route.js';
 
 dotenv.config({});
 
-const allowedOrigins = ['http://localhost:5173'];
-// const allowedOrigins = ['http://localhost:5173', 'https://jobportalapp-1.onrender.com'];
+// const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['http://localhost:5173', 'https://jobify-frontend-4lxx.onrender.com'];
 
 const corsOptions = {
   origin: function (origin, callback) {
