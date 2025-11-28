@@ -40,7 +40,7 @@ const CategoryCarousel = () => {
 
                     {
                         category.map((cat,index)=>(
-                            <CarouselItem className="md:basis:-1/2 lg:basis-1/3" key={index}>
+                            <CarouselItem className="md:basis-1/2 lg:basis-1/3" key={index}>
                                 <Button onClick={()=>handleSubmit(cat)}>{cat}</Button>
                             </CarouselItem>
                         ))
