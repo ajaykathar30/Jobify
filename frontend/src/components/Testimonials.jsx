@@ -83,7 +83,7 @@ const Testimonials = () => {
             <div
               key={i}
               className="min-w-[260px] sm:min-w-[300px] md:min-w-[350px] lg:min-w-[380px]
-                         bg-white shadow-md mx-2 rounded-xl p-6 snap-center border-l-4 border-blue-600"
+                         bg-white shadow-md mx-2 rounded-xl p-6 mt-3 snap-center border-l-4 border-blue-600"
             >
               <div className="flex items-center gap-4">
                 <img
