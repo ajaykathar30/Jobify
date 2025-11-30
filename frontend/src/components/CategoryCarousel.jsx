@@ -34,7 +34,7 @@ const CategoryCarousel = () => {
     }
 
   return (
-    <div> 
+    <div className='hidden sm:hidden md:hidden lg:block'> 
         <Carousel className="w-full max-w-xl mx-auto mt-10 mb-10">
 <CarouselContent>
 

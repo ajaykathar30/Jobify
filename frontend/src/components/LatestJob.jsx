@@ -3,6 +3,8 @@ import JobCards from './JobCards';
 import { useSelector } from 'react-redux';
 const rjob=[1,2,3,4,5,6,7,8,9]
 import {useNavigate} from 'react-router-dom'
+import { Button } from './ui/button';
+import { ArrowRightIcon } from 'lucide-react';
 
 const LatestJob = () => {
   const {allJobs}=useSelector(store=>store.job)
@@ -29,7 +31,11 @@ const LatestJob = () => {
         )):<h1>No job openings available  </h1>
     }
     </div>
+    <div className="flex justify-center mt-10">
+  <Button  onClick={()=>navigate("./jobs")} className=" animate-bounce p-3 cursor-pointer">More Jobs<ArrowRightIcon/></Button>
+</div>
     </div>
+
 
     </>
   );

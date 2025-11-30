@@ -114,7 +114,7 @@ const navigate=useNavigate();
       
 //     </Link>
     
-   <div onClick={()=>navigate(`/description/${job._id}`) } className='border shadow-md px-5 py-1 rounded-xl bg-white hover:shadow-xl'>
+   <div onClick={()=>navigate(`/description/${job._id}`) } className='border shadow-md px-5 py-1 rounded-xl bg-white hover:shadow-xl cursor-pointer'>
       
      <div className='flex gap-2 items-center'>
     {/* <Button className="h-30 w-auto" variant='outline' >

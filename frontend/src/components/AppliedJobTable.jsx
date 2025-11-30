@@ -38,16 +38,16 @@ const AppliedJobTable = () => {
                         <tbody>
                             {applications.map((item) => (
                                 <tr key={item._id} className='bg-white border-b hover:bg-gray-50 transition-colors'>
-                                    <td className='px-6 py-4 font-medium text-gray-900'>
+                                    <td className='px-6 py-4   font-medium text-gray-900'>
                                         {item?.createdAt?.split('T')[0]}
                                     </td>
-                                    <td className='px-6 py-4 text-gray-900'>
+                                    <td className='px-6 py-4  text-gray-900'>
                                         {item?.job?.title}
                                     </td>
-                                    <td className='px-6 py-4 text-gray-900'>
+                                    <td className='px-6 py-4  text-gray-900'>
                                         {item?.job?.company?.name}
                                     </td>
-                                    <td className='px-6 py-4 text-right'>
+                                    <td className='px-6 py-4  text-right'>
                                         <Badge 
                                             className={`${
                                                 item?.status === "rejected" 
