@@ -130,7 +130,9 @@ const dispatch=useDispatch()
           <option value="recruiter">Recruiter</option>
         </select>
 <div className='flex items-center justify-around gap-4 mb-5 w-full'>
-          <label htmlFor="file" className='text-muted-foreground'>Profile Pic</label>
+          <label htmlFor="file" className=''>Profile Pic
+            <span className="text-sm text-gray-500"> (optional)</span>
+          </label>
         <input
           id='file'
           type="file"
@@ -138,9 +140,10 @@ const dispatch=useDispatch()
           onChange={changefilehandler}
           accept='image/*' 
 
-          className="border rounded px-3 py-2 mb-5 cursor-pointer w-1/2 "
+          className="border rounded px-3 py-2 cursor-pointer w-1/2 "
         />
 </div>
+
 
    {/* <label htmlFor="role" className='text-muted-foreground'>Role</label> */}
         

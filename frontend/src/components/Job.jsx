@@ -9,19 +9,30 @@ import { MapPinCheck } from 'lucide-react';
 import { MapPin } from 'lucide-react';
 import { BriefcaseBusiness } from 'lucide-react';
 import { IndianRupee } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 // import { AvatarImage } from '@radix-ui/react-avatar'
 // const JobId="qrefsvxf3wrsdfb"
 const Job = ({job}) => {
+  const {user}=useSelector(store=>store.auth)
+  const navigate=useNavigate()
   const daysAgo=(mongodbTime)=>{
     const createdAt=new Date(mongodbTime)
     const currTime=new Date()
     const timeDiff=currTime-createdAt
     return Math.floor(timeDiff/(24*60*60*1000))
   }
+  const handleClick=()=>{
+    if(user===null){
+      toast.info("Please Login/Signup first")
+    }
+    else{
+      navigate(`/description/${job._id}`)
+    }
+   }
   const diff=daysAgo(job?.createdAt)
-  const navigate=useNavigate()
   return (
-    <div onClick={()=>navigate(`/description/${job._id}`) } className='border shadow-md px-5 py-1 rounded-xl bg-white hover:shadow-xl'>
+    <div onClick={handleClick } className='border shadow-md px-5 py-1 rounded-xl bg-white hover:shadow-xl'>
         <div className='flex justify-between items-center'>
 
      <p className='text-xs my-1'>{

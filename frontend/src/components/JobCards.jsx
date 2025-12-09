@@ -19,16 +19,26 @@ import { useEffect } from 'react'
 import { JOB_API_END_POINT } from '@/utils/constant'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { setAlljobs } from '@/redux/jobSlice'
 import {Link} from 'react-router-dom'
 import { BriefcaseBusiness } from 'lucide-react'
 import { IndianRupee } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 
 const JobCards = ({job}) => {
-   
-const navigate=useNavigate();
+  const {user}=useSelector(store=>store.auth)
+ const navigate=useNavigate();
+ const handleClick=()=>{
+  if(user===null){
+    toast.info("Please Login/Signup first")
+  }
+  else{
+    navigate(`/description/${job._id}`)
+  }
+ }
   // const [first, setfirst] = useState(second)
   return (
 //     <CardContainer className="inter-var w-full max-w-sm">
@@ -95,7 +105,7 @@ const navigate=useNavigate();
 //     <Link to={`/description/${job._id}`} className='w-full   max-w-sm shadow-sm p-3 rounded-xl hover:shadow-xl cursor-pointer bg-white border-1 '>
 //         <h1 className='text-xl '>{job?.company?.name}</h1>
 
-//      <img src={job?.company?.logo ||"/cl.png"} alt="companyLogo" srcset=""  className='h-15 w-15 border-2 rounded-xl'/>
+//      <img src={job?.company?.logo ||"/cl.png"} alt="companyLogo"  className='h-15 w-15 border-2 rounded-xl'/>
     
 //         <div className='flex justify-start items-center gap-1 p-2'>
 // <MapPin className='text-muted-foreground'/>
@@ -114,7 +124,7 @@ const navigate=useNavigate();
       
 //     </Link>
     
-   <div onClick={()=>navigate(`/description/${job._id}`) } className='border shadow-md px-5 py-1 rounded-xl bg-white hover:shadow-xl cursor-pointer'>
+   <div onClick={handleClick} className='border shadow-md px-5 py-1 rounded-xl bg-white hover:shadow-xl cursor-pointer'>
       
      <div className='flex gap-2 items-center'>
     {/* <Button className="h-30 w-auto" variant='outline' >
@@ -122,7 +132,7 @@ const navigate=useNavigate();
             <AvatarImage src={job?.company?.logo ||"/cl.png"}/>
         </Avatar>
      </Button> */}
-     <img src={job?.company?.logo ||"/cl.png"} alt="companyLogo" srcset=""  className='h-15 w-15 border-2 rounded-xl'/>
+     <img src={job?.company?.logo ||"/cl.png"} alt="companyLogo"  className='h-15 w-15 border-2 rounded-xl'/>
      <div className='p-2 space-y-1  w-full'>
         {/* <h1 className='font-poppins text-xl'>{job?.company?.name}</h1> */}
         <h1 className='text-xl  '>{job?.title}</h1>

@@ -10,7 +10,7 @@ const testimonials = [
     img: "https://i.pravatar.cc/100?img=36",
   },
   {
-    name: "Shranay Malhotra",
+    name: "Ajay Kathar",
     rating: 4.7,
     text: "I was struggling to find a job after college, but this app made the process so smooth. The support team also guided me whenever I was stuck.",
     img: "https://i.pravatar.cc/100?img=15",
@@ -22,7 +22,7 @@ const testimonials = [
     img: "https://i.pravatar.cc/100?img=58",
   },
   {
-    name: "Neha Singh",
+    name: "Neeraj Singh",
     rating: 4.8,
     text: "The interface is clean and simple. I loved how quickly I could connect with recruiters and schedule interviews.",
     img: "https://i.pravatar.cc/100?img=12",
@@ -40,7 +40,7 @@ const testimonials = [
     img: "https://i.pravatar.cc/100?img=21",
   },
   {
-    name: "Aditya Raj",
+    name: "Aditi Raj",
     rating: 4.7,
     text: "What impressed me most was the transparency. You can track your application status and directly chat with recruiters. Amazing feature!",
     img: "https://i.pravatar.cc/100?img=40",

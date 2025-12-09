@@ -5,6 +5,7 @@ const rjob=[1,2,3,4,5,6,7,8,9]
 import {useNavigate} from 'react-router-dom'
 import { Button } from './ui/button';
 import { ArrowRightIcon } from 'lucide-react';
+import Job from './Job';
 
 const LatestJob = () => {
   const {allJobs}=useSelector(store=>store.job)

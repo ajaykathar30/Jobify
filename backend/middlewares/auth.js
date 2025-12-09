@@ -4,7 +4,7 @@ const isAuth=async(req ,res,next)=>{
      try{
         const token=req.cookies.token
         if(!token){
-            return res.status(400).json({message:"user not authenticated ",success:false})
+            return res.status(400).json({message:"Please Login/Signup ",success:false})
         }
         const decode=jwt.verify(token,process.env.SECRET_KEY)
         if(!decode){

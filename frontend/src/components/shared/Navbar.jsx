@@ -2,8 +2,8 @@ import React from 'react';
 import { Button } from '../ui/button';
 import { Popover, PopoverTrigger, PopoverContent } from '@radix-ui/react-popover';
 import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar';
-import { LogOut, User2 } from 'lucide-react';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { HomeIcon, LogOut, User2 } from 'lucide-react';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '@/redux/authSlice';
 import axios from 'axios';
@@ -11,6 +11,7 @@ import { USER_API_END_POINT } from '@/utils/constant';
 import { toast, ToastContainer } from 'react-toastify';
 
 const Navbar = () => {
+   const navigate=useNavigate()
   const location = useLocation();
   const params = useParams();
   const dispatch = useDispatch();
@@ -23,9 +24,10 @@ const Navbar = () => {
       const res = await axios.get(`${USER_API_END_POINT}/logout`, {
         withCredentials: true,
       });
-      if (res.data.success) {
-        toast.success(res.data.message);
-      }
+      // if (res.data.success) {
+      //   toast.success(res.data.message);
+      // }
+      navigate("../")
     } catch (error) {
       console.log(error);
       toast.error(error.response?.data?.message || "Logout failed");

@@ -101,7 +101,7 @@ const App = () => {
   return (
     <div>
      <RouterProvider router={appRouter}/>
-     <ToastContainer/>
+     <ToastContainer autoClose={1000}/>
     </div>
   )
 }

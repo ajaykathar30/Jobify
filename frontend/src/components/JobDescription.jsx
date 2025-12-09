@@ -16,6 +16,7 @@ const JobDescription = () => {
     const { singleJob } = useSelector(store => store.job);
     const dispatch = useDispatch();
     const { user } = useSelector(store => store.auth);
+    // const [jobD, setjobD] = useState(null)
     
     const isInitiallyApplied = singleJob?.applications?.some((application) => application.applicant === user?._id) || false;
     const [isApplied, setisApplied] = useState(isInitiallyApplied);
@@ -25,6 +26,7 @@ const JobDescription = () => {
             const res = await axios.get(`${APPLICATION_API_END_POINT}/apply/${id}`, { withCredentials: true })
             if (res.data.success) {
                 setisApplied(true)
+                // console.log(user.id)
                 const updatedSingleJob = { ...singleJob, applications: [...singleJob.applications, { applicant: user.id }] }
                 dispatch(setSinglejob(updatedSingleJob))
                 toast.success(res.data.message)
@@ -51,6 +53,10 @@ const JobDescription = () => {
             }
         }
         fetchData()
+
+        return () => {
+            dispatch(setSinglejob(null));
+        }
     }, [id, dispatch, user?._id])
     // --- YOUR LOGIC ENDS HERE ---
 
@@ -70,7 +76,7 @@ const JobDescription = () => {
     return (
         <div className="bg-gray-50 min-h-screen pb-12">
             <Navbar />
-            
+           
             <div className='max-w-4xl mx-auto mt-10 px-4 sm:px-0'>
                 
                 {/* 1. HEADER CARD: Title, Company Info, and Apply Button */}
