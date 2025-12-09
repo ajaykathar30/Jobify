@@ -19,7 +19,13 @@ const HeroSection = () => {
     <>
       {/* TOP BANNER */}
       <div className="bg-emerald-300 py-12 sm:py-16 px-4">
-        <h1 className="text-center text-3xl sm:text-4xl lg:text-6xl uppercase font-black italic text-black leading-tight">
+        <h1 className="text-center 
+    text-3xl sm:text-4xl lg:text-6xl 
+    uppercase 
+    font-extrabold sm:font-black lg:font-black 
+    italic 
+    text-black 
+    leading-tight">
           Your dream job,
           <br />
           just a click away!

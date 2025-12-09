@@ -106,7 +106,7 @@ const Testimonials = () => {
                 </div>
               </div>
 
-              <p className="text-blue-800 mt-4 text-sm md:text-base leading-relaxed">
+              <p className=" mt-4 text-sm md:text-base leading-relaxed">
                 {t.text}
               </p>
             </div>
