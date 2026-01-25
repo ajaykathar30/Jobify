@@ -7,7 +7,7 @@
 [![Deployment Status](https://img.shields.io/badge/Deployment-Live-success?style=for-the-badge&logo=render)](https://jobify-frontend-4lxx.onrender.com)
 [![Tech Stack](https://img.shields.io/badge/MERN-Stack-blue?style=for-the-badge&logo=react)](https://react.dev)
 
-**Jobify** is a comprehensive job portal application designed to bridge the gap between job seekers and recruiters. Whether you are looking for your next career move or searching for top talent, Jobify provides a seamless, user-friendly interface to manage job applications and listings.
+**Jobify** is a job portal application designed to bridge the gap between job seekers and recruiters. Whether you are looking for your next career move or searching for top talent, Jobify provides a seamless, user-friendly interface to manage job applications and listings.
 
 ## 🔗 Live Demo
 Check out the live application here: **[Jobify Live Link](https://jobify-frontend-4lxx.onrender.com)**
