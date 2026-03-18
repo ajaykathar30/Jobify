@@ -3,23 +3,24 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import getDataUri from "../utils/datauri.js"
 import cloudinary from "../utils/cloudinary.js"
-
+import { resumeVectorEmbeddingsFromUrl } from "../services/resumeEmbeddingService.js"
+import AiDocument from "../models/aiDocument.js"
 export const register = async (req, res) => {
     try {
         const { name, email, phoneNumber, password, role } = req.body
         if (!name || !email || !phoneNumber || !password || !role) {
             return res.status(400).json({ message: "please fill out all the fields !!", success: false })
         }
-        const file=req.file 
+        const file = req.file
         let fileUri;
-        let cloudResponse="";
+        let cloudResponse = "";
         // if(!file){
         //     return res.status(400).json({success:false, message:"Please upload profile pic"})
         // }
-        if(file){
-           console.log("Received file in backend:", req.file);
-            fileUri=getDataUri(file)
-            cloudResponse=await cloudinary.uploader.upload(fileUri,{resource_type: "raw"})
+        if (file) {
+            console.log("Received file in backend:", req.file);
+            fileUri = getDataUri(file)
+            cloudResponse = await cloudinary.uploader.upload(fileUri, { resource_type: "raw" })
         }
 
         const user = await User.findOne({ email })
@@ -33,8 +34,8 @@ export const register = async (req, res) => {
             phoneNumber,
             password: hashedPassword,
             role,
-            profile:{
-                profilePhoto:cloudResponse.secure_url,
+            profile: {
+                profilePhoto: cloudResponse.secure_url,
             }
         })
         return res.status(201).json({ message: 'Account Created successfully ', success: true })
@@ -75,7 +76,7 @@ export const login = async (req, res) => {
             profile: user.profile
         }
         const token = await jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' })
-        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None',secure:true }).json({ message: `Welcome ${(user.name).toUpperCase()}`, success: true, user })
+        return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true }).json({ message: `Welcome ${(user.name).toUpperCase()}`, success: true, user })
 
     }
 
@@ -100,30 +101,24 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const { name, email, phoneNumber, skills, bio } = req.body
- 
+
         const file = req.file //to be understood 
         if (!name || !email || !phoneNumber || !bio || !skills) {
             return res.status(400).json({ message: "please fill out all the fields !! ", success: false })
         }
         let fileUri, cloudResponse;
-        if(file){
+        if (file) {
             try {
-        fileUri = getDataUri(file);
-        cloudResponse = await cloudinary.uploader.upload(fileUri,{resource_type: "raw"});
-    } catch (cloudErr) {
-        console.error("Cloudinary error:", cloudErr);
-        return res.status(500).json({ message: "Error uploading file", success: false });
-    }
-            // console.log("Uploaded File:", req.file);
-
-
-            // fileUri=getDataUri(file)
-            //  cloudResponse=await cloudinary.uploader.upload(fileUri)
+                fileUri = getDataUri(file);
+                cloudResponse = await cloudinary.uploader.upload(fileUri, { resource_type: "raw" });
+            } catch (cloudErr) {
+                console.error("Cloudinary error:", cloudErr);
+                return res.status(500).json({ message: "Error uploading file", success: false });
+            }
         }
-        //cloudinary will come here...
 
         const skillsArray = skills.split(",")
-        const userID = req.id //middleware auth
+        const userID = req.id // from middleware auth
         let user = await User.findById(userID)
         if (!user) {
             return res.status(400).json({ message: "User not found ", success: false })
@@ -133,11 +128,18 @@ export const updateProfile = async (req, res) => {
         user.phoneNumber = phoneNumber
         user.profile.skills = skillsArray
         user.profile.bio = bio
-        // resume to added later 
-        if(cloudResponse){
-            user.profile.resume=cloudResponse.secure_url
-            user.profile.resumeOriginalName=file.originalname
+
+        if (cloudResponse) {
+            user.profile.resume = cloudResponse.secure_url
+            user.profile.resumeOriginalName = file.originalname
+            // Here we will call our resume embedding function .
+            await AiDocument.deleteMany({
+                userId: userID,
+                docType: "resume"});
+
+            await resumeVectorEmbeddingsFromUrl(cloudResponse.secure_url,userID)
         }
+
 
         await user.save()
 
@@ -157,7 +159,7 @@ export const updateProfile = async (req, res) => {
 
 
     }
-    finally{
+    finally {
 
     }
 }

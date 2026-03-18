@@ -8,9 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { AvatarImage,Avatar } from '../ui/avatar'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { Edit2 } from 'lucide-react'
+
 
 import { MoreHorizontalIcon } from 'lucide-react'
 import { useSelector } from 'react-redux'

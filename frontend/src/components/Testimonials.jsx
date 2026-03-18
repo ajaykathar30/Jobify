@@ -4,13 +4,13 @@ import { CheckCircle2Icon } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Genil Sharma",
+    name: "Neha Sharma",
     rating: 4.8,
     text: "Got multiple interview calls within a week. The platform is super easy to use and filters really help in finding the right job.",
     img: "https://i.pravatar.cc/100?img=36",
   },
   {
-    name: "Ajay Kathar",
+    name: "Alex Martin",
     rating: 4.7,
     text: "I was struggling to find a job after college, but this app made the process so smooth. The support team also guided me whenever I was stuck.",
     img: "https://i.pravatar.cc/100?img=15",
@@ -34,13 +34,13 @@ const testimonials = [
     img: "https://i.pravatar.cc/100?img=68",
   },
   {
-    name: "Sanya Kaur",
+    name: "Jeniffer Cook",
     rating: 4.9,
     text: "This app is a blessing for job seekers. The UI is fantastic and the job recommendations were very accurate for my profile.",
     img: "https://i.pravatar.cc/100?img=21",
   },
   {
-    name: "Aditi Raj",
+    name: "Eshita Aggrawal",
     rating: 4.7,
     text: "What impressed me most was the transparency. You can track your application status and directly chat with recruiters. Amazing feature!",
     img: "https://i.pravatar.cc/100?img=40",
@@ -56,10 +56,10 @@ const testimonials = [
 const Testimonials = () => {
   return (
     <div className="bg-blue-100 py-14 px-6 md:px-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center">
+      <div  className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 items-center">
 
         {/* LEFT CARD */}
-        <div className="bg-blue-900 text-white p-8 rounded-2xl shadow-lg flex flex-col justify-between">
+        <div className="bg-blue-900 text-white p-5 rounded-2xl shadow-lg flex flex-col justify-between">
           <div>
             <div className="text-blue-300 text-5xl md:text-6xl mb-4">❝</div>
 

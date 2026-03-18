@@ -10,7 +10,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const JobDescription = () => {
-    // --- YOUR EXACT LOGIC STARTS HERE ---
+
     const params = useParams();
     const id = params.id;
     const { singleJob } = useSelector(store => store.job);
@@ -58,10 +58,10 @@ const JobDescription = () => {
             dispatch(setSinglejob(null));
         }
     }, [id, dispatch, user?._id])
-    // --- YOUR LOGIC ENDS HERE ---
 
 
-    // --- MODERN EMERALD DESIGN ---
+
+
     if (!singleJob) {
         return (
             <>
@@ -170,9 +170,18 @@ const JobDescription = () => {
                     {/* Description Section */}
                     <div>
                         <h2 className='text-xl font-bold text-gray-900 mb-4'>Job Description</h2>
-                        <div className='text-gray-700 leading-relaxed whitespace-pre-line font-poppins'>
-                            {singleJob.description}
-                        </div>
+                       <div className='text-gray-700 leading-relaxed whitespace-pre-line font-poppins'>
+    {singleJob.description
+        .split('.')
+        .filter(sentence => sentence.trim().length > 0)
+        .map((sentence, index) => (
+            <p key={index} className="mb-2">
+                • {sentence.trim()}
+                <br/>
+            </p>
+        ))
+    }
+</div>
                     </div>
                 </div>
             </div>

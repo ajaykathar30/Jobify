@@ -24,7 +24,7 @@ const ApplicantsTable = () => {
   console.log(allApplicants)
   return (
     <div>
-      <Table>
+      <Table >
          <TableCaption>A list of your job applicants </TableCaption>
          <TableHeader>
             <TableRow>

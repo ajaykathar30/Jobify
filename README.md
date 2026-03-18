@@ -76,3 +76,15 @@ Make sure you have **Node.js** installed on your system.
 ```bash
 git clone https://github.com/ajaykathar30/Jobify.git
 cd Jobify
+
+### 2. Add environment variables
+```bash
+MONGO_URI=
+PORT=8080
+SECRET_KEY=
+CLOUD_NAME=
+API_KEY=
+API_SECRET=
+HF_API_KEY=
+GOOGLE_API_KEY=
+

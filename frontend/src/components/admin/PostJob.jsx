@@ -76,12 +76,13 @@ const handleSubmit = async (e) => {
                     <input type="text" className='my-2 p-2 border-1  border-amber-50 rounded ' value={job.location} onChange={handleChange} placeholder='job location..' name='location' />
                     <input type="text" className='my-2 p-2 border-1  border-amber-50 rounded ' value={job.requirements} onChange={handleChange} placeholder='Skills required eg. reactJS , NodeJs , NextJs...' name='requirements' />
                     <input type="number" className='my-2 p-2 border-1  border-amber-50 rounded ' value={job.vacancy} onChange={handleChange} placeholder='No. of vacancies ' name='vacancy' />
-                    <select name="jobType" onChange={handleChange} className='my-2 p-2 border-1  border-amber-50 rounded'>
-                    <option disabled>Job Type</option>
+                   <select name="jobType" value={job.jobType} onChange={handleChange} className="my-2 p-2 border border-amber-50 rounded">
+                    <option value="" disabled> Job Type</option>
                     <option value="Full-time">Full-Time</option>
-                    <option value="W.F.H.">W.F.H.</option>
-                    <option value="Part-Time">Part-Time</option>
+                    <option value="WFH">WFH</option>
+                    <option value="Internship">Internship</option>
                     </select>
+
                     <select name="companyId" onChange={handleChange} className='my-2 p-2 border-1  border-amber-50 rounded'>
                     <option disabled>Choose Company</option>
                    {

@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import Job from "../models/job.js"
+import { jobEmbeddings } from "../services/jobEmbeddings.js"
 // to be posted by admin
 export const postJob=async (req ,res)=>{
     try{
@@ -53,6 +54,10 @@ if (!vacancy) {
             company:companyId,
             vacancy
         })
+
+        const len=await jobEmbeddings(job,userId);
+        console.log(len)
+
         return res.status(201).json({message:"job created successfully",job,success:true})
 
     }catch(error){
@@ -72,7 +77,7 @@ export const getAlljob=async(req,res)=>{
             ]
         }
         const jobs=await Job.find(query).populate({
-            path:"company", // this meanas there is a company field in job model
+            path:"company", // this means there is a company field in job model
 
         }).sort({createdAt:-1})
         
