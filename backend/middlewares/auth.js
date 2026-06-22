@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import User from '../models/user.js'
 
 const isAuth=async(req ,res,next)=>{
      try{
@@ -15,7 +16,21 @@ const isAuth=async(req ,res,next)=>{
      }catch(error){
         console.error(error)
     return res.status(500).json({ message: "Internal server error", success: false })
- 
+
      }
 }
+
+export const restrictTo=(...allowedRoles)=>async(req,res,next)=>{
+    try{
+        const user=await User.findById(req.id)
+        if(!user || !allowedRoles.includes(user.role)){
+            return res.status(403).json({message:"Not authorized",success:false})
+        }
+        next()
+    }catch(error){
+        console.error(error)
+        return res.status(500).json({ message: "Internal server error", success: false })
+    }
+}
+
 export default isAuth
