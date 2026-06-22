@@ -17,6 +17,7 @@
     "@langchain/core": "^1.1.8",
     "@langchain/mongodb": "^1.1.0",
     "@langchain/textsplitters": "^1.0.1",
+    "axios": "^1.18.0",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "cloudinary": "^2.6.1",
