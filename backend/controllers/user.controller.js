@@ -129,17 +129,24 @@ export const updateProfile = async (req, res) => {
         user.profile.skills = skillsArray
         user.profile.bio = bio
 
+        let resumeProcessingFailed = false
         if (cloudResponse) {
-            user.profile.resume = cloudResponse.secure_url
-            user.profile.resumeOriginalName = file.originalname
-            // Here we will call our resume embedding function .
-            await AiDocument.deleteMany({
-                userId: userID,
-                docType: "resume"});
-
-            await resumeVectorEmbeddingsFromUrl(cloudResponse.secure_url,userID)
+            try {
+                // Create the new embedding before touching the old one - if this
+                // throws, the user's existing working resume/embedding is untouched.
+                await resumeVectorEmbeddingsFromUrl(cloudResponse.secure_url, userID)
+                const resumeDocs = await AiDocument.find({ userId: userID, docType: "resume" }).sort({ createdAt: -1 })
+                const staleIds = resumeDocs.slice(1).map(d => d._id)
+                if (staleIds.length) {
+                    await AiDocument.deleteMany({ _id: { $in: staleIds } })
+                }
+                user.profile.resume = cloudResponse.secure_url
+                user.profile.resumeOriginalName = file.originalname
+            } catch (resumeErr) {
+                console.error("Resume processing failed:", resumeErr)
+                resumeProcessingFailed = true
+            }
         }
-
 
         await user.save()
 
@@ -151,7 +158,14 @@ export const updateProfile = async (req, res) => {
             phoneNumber: user.phoneNumber,
             profile: user.profile
         }
-        return res.status(200).json({ message: 'profile updated successfully ', user, success: true })
+        return res.status(200).json({
+            message: resumeProcessingFailed
+                ? "Profile updated, but we couldn't process that resume file. Please try a different PDF."
+                : 'profile updated successfully ',
+            user,
+            success: true,
+            resumeProcessingFailed
+        })
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Internal server error", success: false });
