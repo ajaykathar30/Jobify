@@ -30,7 +30,7 @@ export const rankApplicants = async (jobId) => {
     }
 
     // For each job chunk, ask Atlas Vector Search to rank this job's
-    // applicants by resume similarity to that chunk.
+    // applicants by resume similarity to that chunk (dense signal).
     const perChunkResults = await Promise.all(
         jobDocs.map((jobDoc) =>
             AiDocument.aggregate([
@@ -58,9 +58,36 @@ export const rankApplicants = async (jobId) => {
         )
     );
 
-    // Fuse the per-chunk rankings with Reciprocal Rank Fusion.
+    // Sparse signal: rank applicants by how many of the job's literal
+    // requirement terms appear in their resume text - catches exact
+    // "must have X" requirements that embeddings can dilute.
+    const requirementTerms = (job.requirements || "")
+        .split(",")
+        .map(term => term.trim().toLowerCase())
+        .filter(Boolean);
+
+    const rankedLists = [...perChunkResults];
+
+    if (requirementTerms.length) {
+        const resumeDocs = await AiDocument.find({
+            userId: { $in: applicantIds },
+            docType: "resume"
+        });
+
+        const overlapCounts = resumeDocs.map(doc => {
+            const text = doc.chunkText.toLowerCase();
+            const count = requirementTerms.filter(term => text.includes(term)).length;
+            return { userId: doc.userId, count };
+        }).filter(r => r.count > 0);
+
+        overlapCounts.sort((a, b) => b.count - a.count);
+        rankedLists.push(overlapCounts);
+    }
+
+    // Fuse the dense per-chunk rankings and the sparse skill-overlap
+    // ranking with Reciprocal Rank Fusion.
     const rrfScores = {};
-    for (const resultList of perChunkResults) {
+    for (const resultList of rankedLists) {
         resultList.forEach((doc, idx) => {
             const uid = doc.userId.toString();
             rrfScores[uid] = (rrfScores[uid] || 0) + 1 / (RRF_K + idx + 1);

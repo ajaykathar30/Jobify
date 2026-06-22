@@ -6,11 +6,17 @@ const applicationSchema = new Schema({
   applicant:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},
   status: {
   type: String,
-  enum: ['pending', 'rejected', 'accepted'], 
+  enum: ['pending', 'rejected', 'accepted'],
   default: 'pending'
-}
+},
+  aiRerank: {
+    score: { type: Number },
+    matchedRequirements: { type: [String], default: [] },
+    missingRequirements: { type: [String], default: [] },
+    reasoning: { type: String },
+    rerankedAt: { type: Date }
+  }
 
-
-},{timestamps:true}); 
+},{timestamps:true});
 const Application =mongoose.model('Application',applicationSchema)
 export default Application;

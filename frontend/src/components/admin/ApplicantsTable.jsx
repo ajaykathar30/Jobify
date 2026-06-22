@@ -4,7 +4,7 @@ import { Popover, PopoverTrigger,PopoverContent } from '../ui/popover'
 import { Badge } from '../ui/badge'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../ui/dialog'
 import { Button } from '../ui/button'
-import { MoreHorizontalIcon } from 'lucide-react'
+import { MoreHorizontalIcon, Sparkles, Loader2 } from 'lucide-react'
 import { useSelector, useDispatch } from 'react-redux'
 import { setAllApplicants } from '@/redux/applicationSlice'
 import { APPLICATION_API_END_POINT } from '@/utils/constant'
@@ -29,6 +29,7 @@ const ApplicantsTable = () => {
   const dispatch=useDispatch()
   const {allApplicants}=useSelector(store=>store.application)
   const [confirmTarget, setConfirmTarget] = useState(null)
+  const [isReranking, setIsReranking] = useState(false)
 
   const statusHandler=async (status,id)=>{
     try {
@@ -52,9 +53,33 @@ const ApplicantsTable = () => {
     setConfirmTarget(null)
   }
 
+  const handleRerank=async()=>{
+    if(!allApplicants?._id || isReranking) return
+    try {
+      setIsReranking(true)
+      await axios.post(`${APPLICATION_API_END_POINT}/${allApplicants._id}/rerank`,{},{withCredentials:true})
+      const res=await axios.get(`${APPLICATION_API_END_POINT}/${allApplicants._id}/applicants`,{withCredentials:true})
+      if(res.data.success){
+        dispatch(setAllApplicants(res.data.job))
+        toast.success("Re-ranked top candidates with AI")
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response?.data?.message || "Rerank failed")
+    } finally {
+      setIsReranking(false)
+    }
+  }
+
   console.log(allApplicants)
   return (
     <div>
+      <div className='flex justify-end mb-3'>
+        <Button onClick={handleRerank} disabled={isReranking} variant="outline">
+          {isReranking ? <Loader2 className='animate-spin h-4 w-4 mr-2'/> : <Sparkles className='h-4 w-4 mr-2'/>}
+          {isReranking ? 'Reranking...' : 'Re-rank with AI'}
+        </Button>
+      </div>
       <Table >
          <TableCaption>A list of your job applicants </TableCaption>
          <TableHeader>
@@ -64,6 +89,7 @@ const ApplicantsTable = () => {
                 <TableHead className='font-bold '>Contact</TableHead>
                 <TableHead className='font-bold '>Resume</TableHead>
                 <TableHead className='font-bold '>Match Score</TableHead>
+                <TableHead className='font-bold '>AI Rerank</TableHead>
                 <TableHead className='font-bold '>Status</TableHead>
                 <TableHead className='font-bold '>Date</TableHead>
                 <TableHead className='font-bold '>Action</TableHead>
@@ -86,6 +112,34 @@ const ApplicantsTable = () => {
           <Badge variant="secondary" className={matchScoreBadgeClass(job?.matchScore ?? 0)}>
             {job?.matchScore ?? 0}%
           </Badge>
+        </TableCell>
+        <TableCell>
+          {job?.aiRerank?.score != null ? (
+            <Popover>
+              <PopoverTrigger>
+                <Badge variant="secondary" className={`cursor-pointer ${matchScoreBadgeClass(job.aiRerank.score)}`}>
+                  {job.aiRerank.score}%
+                </Badge>
+              </PopoverTrigger>
+              <PopoverContent className='w-72 text-sm space-y-2'>
+                <p className='text-gray-700'>{job.aiRerank.reasoning}</p>
+                {job.aiRerank.matchedRequirements?.length > 0 && (
+                  <div>
+                    <p className='font-semibold text-emerald-700'>Matched</p>
+                    <p className='text-gray-600'>{job.aiRerank.matchedRequirements.join(', ')}</p>
+                  </div>
+                )}
+                {job.aiRerank.missingRequirements?.length > 0 && (
+                  <div>
+                    <p className='font-semibold text-red-700'>Missing</p>
+                    <p className='text-gray-600'>{job.aiRerank.missingRequirements.join(', ')}</p>
+                  </div>
+                )}
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <span className='text-gray-400'>—</span>
+          )}
         </TableCell>
         <TableCell>
           <Badge variant="secondary" className={statusBadgeClass(job?.status)}>
@@ -111,7 +165,7 @@ const ApplicantsTable = () => {
     ))
   ) : (
     <TableRow>
-      <TableCell colSpan={8} className='text-center'>No applicants found</TableCell>
+      <TableCell colSpan={9} className='text-center'>No applicants found</TableCell>
     </TableRow>
   )
 }

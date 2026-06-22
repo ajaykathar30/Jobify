@@ -1,6 +1,7 @@
 import Application from '../models/application.js'
 import Job from '../models/job.js'
 import { rankApplicants } from '../services/rankApplicants.js'
+import { rerankCandidates } from '../services/rerankCandidates.js'
 import { normalizeScores } from '../utils/normalizeScores.js'
 // USER WANTS TO APPLY JOB
 export const applyJob=async(req,res)=>{
@@ -139,8 +140,8 @@ export const getApplicants = async (req, res) => {
       matchScore: normalizedScores[i]
     }));
 
-    // 🔹 STEP 4: Sort by AI score
-    job.applications.sort((a, b) => b.aiScore - a.aiScore);
+    // 🔹 STEP 4: Sort by AI rerank score when available, otherwise the Stage-1 match score
+    job.applications.sort((a, b) => (b.aiRerank?.score ?? b.matchScore) - (a.aiRerank?.score ?? a.matchScore));
 
     return res.status(200).json({
       success: true,
@@ -151,6 +152,24 @@ export const getApplicants = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       message: "Internal server error",
+      success: false
+    });
+  }
+};
+
+export const rerankApplicantsController = async (req, res) => {
+  try {
+    const jobId = req.params.id;
+    const updates = await rerankCandidates(jobId);
+    return res.status(200).json({
+      success: true,
+      message: `Reranked ${updates.length} candidate(s)`,
+      rerankedCount: updates.length
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: error.message || "Internal server error",
       success: false
     });
   }
