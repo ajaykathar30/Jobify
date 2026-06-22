@@ -8,6 +8,7 @@ import companyRoute from './routes/company.route.js';
 import jobRoute from './routes/job.routes.js';
 import applicationRoute from './routes/application.route.js';
 import aiRoute from "./routes/ai.routes.js"
+import dashboardRoute from "./routes/dashboard.routes.js"
 
 dotenv.config({});
 
@@ -46,6 +47,7 @@ app.use('/api/v1/company', companyRoute);
 app.use('/api/v1/job', jobRoute);
 app.use('/api/v1/application', applicationRoute);
 app.use('/api/v1/ai', aiRoute);
+app.use('/api/v1/dashboard', dashboardRoute);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

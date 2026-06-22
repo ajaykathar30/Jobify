@@ -23,7 +23,9 @@ const jobSchema = new Schema({
   applications: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Application'
-  }]
+  }],
+  deadline: { type: Date, default: null },
+  status: { type: String, enum: ['open', 'closed'], default: 'open' }
 },{timestamps:true});
 
 const Job = mongoose.model('Job', jobSchema);

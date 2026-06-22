@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from './shared/Navbar'
+import Job from './Job'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
-import { Contact, Mail, Pen, StarsIcon } from 'lucide-react'
+import { Contact, Mail, Pen, StarsIcon, Loader2 } from 'lucide-react'
 import { Badge } from './ui/badge'
 import AppliedJobTable from './AppliedJobTable'
 import UpdateProfileDialog from './UpdateProfileDialog'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
-import { AI_API_END_POINT } from '@/utils/constant'
+import { AI_API_END_POINT, USER_API_END_POINT } from '@/utils/constant'
 // keeping your existing constants
 
 const resume = true;
@@ -17,8 +18,42 @@ const Profile = () => {
     const [open, setopen] = useState(false);
     const { user } = useSelector(store => store.auth);
     const [analysis, setAnalysis] = useState({})
+    const [isAnalyzing, setIsAnalyzing] = useState(false)
+    const [recommendedJobs, setRecommendedJobs] = useState([])
+    const [savedJobs, setSavedJobs] = useState([])
+
+    useEffect(() => {
+        if (!user?.profile?.resume) return;
+        const fetchRecommendations = async () => {
+            try {
+                const res = await axios.get(`${AI_API_END_POINT}/jobRecommendations`, { withCredentials: true })
+                if (res.data.success) {
+                    setRecommendedJobs(res.data.jobs)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchRecommendations()
+    }, [user?.profile?.resume])
+
+    useEffect(() => {
+        const fetchSavedJobs = async () => {
+            try {
+                const res = await axios.get(`${USER_API_END_POINT}/savedJobs`, { withCredentials: true })
+                if (res.data.success) {
+                    setSavedJobs(res.data.jobs)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchSavedJobs()
+    }, [user?.profile?.savedJobs])
     const handleClick=async ()=>{
+        if (isAnalyzing) return;
         try {
+            setIsAnalyzing(true)
             const res=await axios.get(`${AI_API_END_POINT}/analyzeResume`,{
                 withCredentials:true
             })
@@ -27,6 +62,8 @@ const Profile = () => {
             setAnalysis(data.analysis);
         } catch (error) {
             console.log(error)
+        } finally {
+            setIsAnalyzing(false)
         }
     }
 
@@ -114,20 +151,35 @@ const Profile = () => {
                                 <div>
 
                                     <button
-    className="cursor-pointergroup p-[2px] rounded-full
+    className="cursor-pointer group p-[2px] rounded-full
     bg-gradient-to-r from-emerald-500 via-sky-500 to-yellow-400
     transition-all duration-300 ease-out
-    hover:scale-[1.01] hover:shadow-md "
-    onClick={handleClick}>
+    hover:scale-[1.01] hover:shadow-md
+    disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+    onClick={handleClick}
+    disabled={isAnalyzing}>
         <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-white text-black font-normal text-sm transition-all duration-300 group-hover:bg-white/95">
-        <StarsIcon size={20}className="transition-transform duration-300 ease-out group-hover:rotate-90" />
-                            Analyze Resume</span></button>
+        {isAnalyzing ? (
+          <Loader2 size={20} className="animate-spin" />
+        ) : (
+          <StarsIcon size={20} className="transition-transform duration-300 ease-out group-hover:rotate-90" />
+        )}
+                            {isAnalyzing ? "Analyzing..." : "Analyze Resume"}</span></button>
 
 
                                 </div>
                             </div>
                             <div>
-                               {Object.keys(analysis).length > 0 && (
+                               {isAnalyzing && (
+                                   <div className="mt-6 bg-gray-50 border border-gray-200 rounded-xl p-6 space-y-4 animate-pulse">
+                                       <div className="h-5 w-40 bg-gray-200 rounded" />
+                                       <div className="h-4 w-full bg-gray-200 rounded" />
+                                       <div className="h-4 w-5/6 bg-gray-200 rounded" />
+                                       <div className="h-4 w-2/3 bg-gray-200 rounded" />
+                                       <p className="text-sm text-gray-500">Analyzing your resume, this may take a few seconds...</p>
+                                   </div>
+                               )}
+                               {!isAnalyzing && Object.keys(analysis).length > 0 && (
                                    <div className="mt-6 bg-gray-50 border border-gray-200 rounded-xl p-6 space-y-5">
 
     <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
@@ -237,6 +289,30 @@ const Profile = () => {
                     </div>
 
                 </div>
+
+                {/* Saved Jobs Section */}
+                {savedJobs.length > 0 && (
+                    <div className='bg-white border border-gray-100 rounded-2xl shadow-sm p-8 mb-8'>
+                        <h2 className='font-bold text-xl text-gray-900 mb-5'>Saved Jobs</h2>
+                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
+                            {savedJobs.map(job => (
+                                <Job job={job} key={job._id} />
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Jobs For You Section */}
+                {recommendedJobs.length > 0 && (
+                    <div className='bg-white border border-gray-100 rounded-2xl shadow-sm p-8 mb-8'>
+                        <h2 className='font-bold text-xl text-gray-900 mb-5'>Jobs For You</h2>
+                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
+                            {recommendedJobs.map(job => (
+                                <Job job={job} key={job._id} />
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Applied Jobs Section */}
                 <div className='bg-white border border-gray-100 rounded-2xl shadow-sm p-8'>

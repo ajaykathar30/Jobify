@@ -20,6 +20,7 @@ const JobDescription = () => {
     
     const isInitiallyApplied = singleJob?.applications?.some((application) => application.applicant === user?._id) || false;
     const [isApplied, setisApplied] = useState(isInitiallyApplied);
+    const isJobOpen = singleJob?.status === "open" && (!singleJob?.deadline || new Date(singleJob.deadline) > new Date());
 
     const handleApply = async () => {
         try {
@@ -119,6 +120,11 @@ const JobDescription = () => {
                                 <Badge variant="secondary" className='bg-gray-100 text-gray-700 hover:bg-gray-200 border-gray-200 px-3 py-1 text-sm rounded-full'>
                                     {singleJob.jobType}
                                 </Badge>
+                                {!isJobOpen && (
+                                    <Badge variant="secondary" className='bg-red-50 text-red-700 border-red-200 px-3 py-1 text-sm rounded-full'>
+                                        Closed
+                                    </Badge>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -128,6 +134,10 @@ const JobDescription = () => {
                         {isApplied ? (
                             <Button disabled className='w-full md:w-auto bg-gray-300 text-gray-600 cursor-not-allowed px-8 py-3 text-lg rounded-full font-semibold'>
                                 Already Applied
+                            </Button>
+                        ) : !isJobOpen ? (
+                            <Button disabled className='w-full md:w-auto bg-gray-300 text-gray-600 cursor-not-allowed px-8 py-3 text-lg rounded-full font-semibold'>
+                                Applications Closed
                             </Button>
                         ) : (
                             <Button onClick={handleApply} className='w-full md:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 text-lg rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-emerald-200'>
@@ -151,6 +161,7 @@ const JobDescription = () => {
                         <DetailItem label="Salary" value={`${singleJob.salary} LPA`} />
                         <DetailItem label="Applicants" value={singleJob?.applications?.length || 0} />
                         <DetailItem label="Posted Date" value={singleJob?.createdAt?.split('T')[0] || 'N/A'} />
+                        <DetailItem label="Deadline" value={singleJob?.deadline?.split('T')[0] || 'No deadline'} />
                     </div>
 
                     {/* Requirements Section (Added since you have the data) */}

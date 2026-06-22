@@ -33,7 +33,8 @@ const userSchema = new Schema({
     profilePhoto:{
         type:String,
         default:''
-    }
+    },
+    savedJobs:[{type:mongoose.Schema.Types.ObjectId,ref:'Job'}]
   }
   
 },{timestamps:true});

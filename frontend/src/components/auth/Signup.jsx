@@ -156,7 +156,7 @@ const dispatch=useDispatch()
       </div>
     </div>
     <ToastContainer
-    autoClose={1800}
+    autoClose={1000}
     />
     </>
   );

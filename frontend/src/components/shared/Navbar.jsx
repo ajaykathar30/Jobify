@@ -64,6 +64,13 @@ const Navbar = () => {
                   </Button>
                 </Link>
               </li>
+              <li>
+                <Link to='/admin/dashboard'>
+                  <Button variant="link" className={`${location.pathname === '/admin/dashboard' ? 'underline underline-offset-4' : ''} text-sm md:text-md text-black font-bold p-0 md:p-4`}>
+                    Dashboard
+                  </Button>
+                </Link>
+              </li>
             </>
           ) : (
             <>
@@ -78,13 +85,6 @@ const Navbar = () => {
                 <Link to="/jobs">
                   <Button variant="link" className={`${location.pathname === '/jobs' ? 'underline underline-offset-4' : ''} text-md md:text-md text-black font-bold p-0 md:p-4`}>
                     Jobs
-                  </Button>
-                </Link>
-              </li>
-              <li>
-                <Link to='/browse'>
-                  <Button variant="link" className={`${location.pathname === '/browse' ? 'underline underline-offset-4' : ''} text-md md:text-md text-black font-bold p-0 md:p-4`}>
-                    Browse
                   </Button>
                 </Link>
               </li>
@@ -157,7 +157,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
-      <ToastContainer />
+      <ToastContainer autoClose={1000} />
     </nav>
   );
 };

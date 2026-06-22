@@ -1,6 +1,7 @@
 import Application from '../models/application.js'
 import Job from '../models/job.js'
 import { rankApplicants } from '../services/rankApplicants.js'
+import { normalizeScores } from '../utils/normalizeScores.js'
 // USER WANTS TO APPLY JOB
 export const applyJob=async(req,res)=>{
     try{
@@ -17,6 +18,10 @@ export const applyJob=async(req,res)=>{
         const job=await Job.findById(jobId)
         if(!job){
             return res.status(404).json({message:"Job not found",success:false})
+        }
+        const isJobOpen=job.status==="open" && (!job.deadline || job.deadline>new Date())
+        if(!isJobOpen){
+            return res.status(400).json({message:"This job is closed and no longer accepting applications",success:false})
         }
         const newApplication =await Application.create({
             job:jobId,
@@ -127,11 +132,15 @@ export const getApplicants = async (req, res) => {
   aiScore: scoreMap[app.applicant._id.toString()] || 0
 }));
 
+    // 🔹 STEP 3.5: Normalize aiScore into a 0-100 match % relative to this job's pool
+    const normalizedScores = normalizeScores(job.applications, app => app.aiScore);
+    job.applications = job.applications.map((app, i) => ({
+      ...app,
+      matchScore: normalizedScores[i]
+    }));
 
     // 🔹 STEP 4: Sort by AI score
     job.applications.sort((a, b) => b.aiScore - a.aiScore);
-
-      console.log(job.applications[1])
 
     return res.status(200).json({
       success: true,
@@ -155,11 +164,17 @@ export const updateApplicationStatus=async(req,res)=>{
         if(!status || !applicationId){
             return res.status(400).json({message:"status and applicationId are required",success:false})
         }
-        const updatedApplication=await Application.findByIdAndUpdate(applicationId,{status},{new:true})
-        if(!updatedApplication){
+        const application=await Application.findById(applicationId)
+        if(!application){
             return res.status(404).json({message:"Application not found",success:false})
         }
-        return res.status(200).json({message:"Application status updated successfully",application:updatedApplication,success:true})
+        if(application.status===status){
+            return res.status(200).json({message:"Status unchanged",application,success:true})
+        }
+        application.status=status
+        await application.save()
+
+        return res.status(200).json({message:"Application status updated successfully",application,success:true})
     }catch (error) {
         console.error(error)
         return res.status(500).json({ message: "Internal server error", success: false })

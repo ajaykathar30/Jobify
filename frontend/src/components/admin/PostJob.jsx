@@ -21,7 +21,7 @@ const PostJob = () => {
        const {allCompanies}=useSelector(store=>store.company)
     const navigate=useNavigate()
     const [job, setjob] = useState({
-        title:'',location:'',jobType:'',experience:'',salary:'',vacancy:'',requirements:'',description:'',companyId:''
+        title:'',location:'',jobType:'',experience:'',salary:'',vacancy:'',requirements:'',description:'',companyId:'',deadline:''
     })
     const handleChange=(e)=>{
             setjob({...job,[e.target.name]:e.target.value})
@@ -42,7 +42,7 @@ const handleSubmit = async (e) => {
                 }, 1500);
                 toast.success(res.data.message)}
                 setjob({
-        title:'',location:'',jobType:'',experience:'',salary:'',vacancy:'',requirements:'',description:'',companyId:''
+        title:'',location:'',jobType:'',experience:'',salary:'',vacancy:'',requirements:'',description:'',companyId:'',deadline:''
     })
             } catch (error) {
                   console.log("hi2")
@@ -76,6 +76,7 @@ const handleSubmit = async (e) => {
                     <input type="text" className='my-2 p-2 border-1  border-amber-50 rounded ' value={job.location} onChange={handleChange} placeholder='job location..' name='location' />
                     <input type="text" className='my-2 p-2 border-1  border-amber-50 rounded ' value={job.requirements} onChange={handleChange} placeholder='Skills required eg. reactJS , NodeJs , NextJs...' name='requirements' />
                     <input type="number" className='my-2 p-2 border-1  border-amber-50 rounded ' value={job.vacancy} onChange={handleChange} placeholder='No. of vacancies ' name='vacancy' />
+                    <input type="date" className='my-2 p-2 border-1  border-amber-50 rounded ' value={job.deadline} onChange={handleChange} placeholder='Application deadline (optional)' name='deadline' />
                    <select name="jobType" value={job.jobType} onChange={handleChange} className="my-2 p-2 border border-amber-50 rounded">
                     <option value="" disabled> Job Type</option>
                     <option value="Full-time">Full-Time</option>

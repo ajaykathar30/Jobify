@@ -1,96 +1,78 @@
 import AiDocument from "../models/aiDocument.js"
 import Job from "../models/job.js"
-export const rankApplicants=async (jobId)=>{
-    const job=await Job.findById(jobId).populate({
-        path:'applications',
-        
-            populate:{path:'applicant'}
-        
+
+const RRF_K = 10;
+const VECTOR_INDEX_NAME = "resume_vector_index";
+
+export const rankApplicants = async (jobId) => {
+    const job = await Job.findById(jobId).populate({
+        path: 'applications',
+        populate: { path: 'applicant' }
     });
 
-    if(!job){
+    if (!job) {
         throw new Error("Job not found")
     }
 
-    const applicantIds=job.applications.map((app)=>app.applicant._id
-    )
+    const applicantIds = job.applications.map((app) => app.applicant._id)
 
-    const jobDocs=await AiDocument.find({
-        'jobId':jobId,
-        'docType':"job"
+    if (!applicantIds.length) {
+        return [];
+    }
+
+    const jobDocs = await AiDocument.find({
+        'jobId': jobId,
+        'docType': "job"
     })
 
     if (!jobDocs.length) {
         throw new Error("Job embeddings not found");
     }
 
-    const resumeDocs=await AiDocument.find({
-        userId:{$in:applicantIds},
-        docType:"resume"
-    })
+    // For each job chunk, ask Atlas Vector Search to rank this job's
+    // applicants by resume similarity to that chunk.
+    const perChunkResults = await Promise.all(
+        jobDocs.map((jobDoc) =>
+            AiDocument.aggregate([
+                {
+                    $vectorSearch: {
+                        index: VECTOR_INDEX_NAME,
+                        path: "embedding",
+                        queryVector: jobDoc.embedding,
+                        exact: true,
+                        limit: applicantIds.length,
+                        filter: {
+                            docType: "resume",
+                            userId: { $in: applicantIds }
+                        }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        userId: 1,
+                        score: { $meta: "vectorSearchScore" }
+                    }
+                }
+            ])
+        )
+    );
 
-   // Group resume chunks by user
-    const resumeMap = {};
-    for (const doc of resumeDocs) {
-        const uid=doc.userId.toString()
-        if (!resumeMap[uid]) resumeMap[uid] = [];
-        resumeMap[uid].push(doc.embedding);
+    // Fuse the per-chunk rankings with Reciprocal Rank Fusion.
+    const rrfScores = {};
+    for (const resultList of perChunkResults) {
+        resultList.forEach((doc, idx) => {
+            const uid = doc.userId.toString();
+            rrfScores[uid] = (rrfScores[uid] || 0) + 1 / (RRF_K + idx + 1);
+        });
     }
 
-    const ranked = [];
+    const ranked = applicantIds.map((userId) => ({
+        userId,
+        score: rrfScores[userId.toString()] || 0
+    }));
 
-    // 3. Score each applicant
-    for (const userId of applicantIds) {
-        const uid = userId.toString();
-
-        const resumeEmbeddings = resumeMap[uid];
-
-        // 0 score if no resume
-        if (!resumeEmbeddings) {
-            ranked.push({ userId, score: 0 });
-            continue;
-        }
-
-        let bestScore = 0;
-
-        for (const jobChunk of jobDocs) {
-            for (const resumeChunk of resumeEmbeddings) {
-                const score = cosineSimilarity(
-                    jobChunk.embedding,
-                    resumeChunk
-                );
-                bestScore = Math.max(bestScore, score);
-            }
-        }
-
-        ranked.push({ userId, score: bestScore });
-    }
-
-    // 4. Sort descending by relevance
     ranked.sort((a, b) => b.score - a.score);
-    // console.log(ranked)
+
     return ranked;
-   
-    
-}
-
-export function cosineSimilarity(vecA, vecB) {
-    if (!vecA || !vecB) return 0;
-    if (vecA.length !== vecB.length) {
-        throw new Error("Vector dimensions do not match");
-    }
-
-    let dot = 0;
-    let normA = 0;
-    let normB = 0;
-
-    for (let i = 0; i < vecA.length; i++) {
-        dot += vecA[i] * vecB[i];
-        normA += vecA[i] * vecA[i];
-        normB += vecB[i] * vecB[i];
-    }
-
-    if (normA === 0 || normB === 0) return 0;
-
-    return dot / (Math.sqrt(normA) * Math.sqrt(normB));
 }

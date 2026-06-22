@@ -30,7 +30,7 @@ const CategoryCarousel = () => {
     const dispatch=useDispatch()
     const handleSubmit=(query)=>{
                 dispatch(setSearchedQuery(query))
-                navigate("/browse")
+                navigate("/jobs")
     }
 
   return (
