@@ -25,7 +25,7 @@ export const register = async (req, res) => {
 
         const user = await User.findOne({ email })
         if (user) {
-            return res.status(400).json({ message: "User already exists . Use different email ", success: false })
+            return res.status(409).json({ message: "User already exists . Use different email ", success: false })
         }
         const hashedPassword = await bcrypt.hash(password, 10)
         await User.create({
@@ -54,15 +54,15 @@ export const login = async (req, res) => {
         }
         let user = await User.findOne({ email })
         if (!user) {
-            return res.status(400).json({ message: "User does not exists register first ", success: false })
+            return res.status(401).json({ message: "User does not exists register first ", success: false })
         }
         const isvalidUser = await bcrypt.compare(password, user.password)
         if (!isvalidUser) {
-            return res.status(400).json({ message: 'incorrect email or password ,try again !!' })
+            return res.status(401).json({ message: 'incorrect email or password ,try again !!', success: false })
         }
 
         if (role != user.role) {
-            return res.status(400).json({ message: 'Account does not exists with current role !!  ' })
+            return res.status(401).json({ message: 'Account does not exists with current role !!  ', success: false })
         }
         const tokenData = {
             userID: user._id
@@ -121,7 +121,7 @@ export const updateProfile = async (req, res) => {
         const userID = req.id // from middleware auth
         let user = await User.findById(userID)
         if (!user) {
-            return res.status(400).json({ message: "User not found ", success: false })
+            return res.status(404).json({ message: "User not found ", success: false })
         }
         user.name = name
         user.email = email

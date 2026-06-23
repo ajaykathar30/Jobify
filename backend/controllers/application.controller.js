@@ -3,17 +3,18 @@ import Job from '../models/job.js'
 import { rankApplicants } from '../services/rankApplicants.js'
 import { rerankCandidates } from '../services/rerankCandidates.js'
 import { normalizeScores } from '../utils/normalizeScores.js'
+import { statusFromError } from '../utils/errorStatus.js'
 // USER WANTS TO APPLY JOB
 export const applyJob=async(req,res)=>{
     try{
-        const userId=req.id 
+        const userId=req.id
         const jobId=req.params.id
         if(!jobId){
-            return res.status(404).json({message:"jobId is required",success:false})
+            return res.status(400).json({message:"jobId is required",success:false})
         }
         const existingApplication=await Application.findOne({job:jobId,applicant:userId})
         if(existingApplication){
-            return res.status(400).json({message:"u already applied for this job",success:false})
+            return res.status(409).json({message:"u already applied for this job",success:false})
         }
 
         const job=await Job.findById(jobId)
@@ -50,10 +51,7 @@ export const getApplications=async(req,res)=>{
                 options:{sort:{createdAt:-1}},
             }
         })
-        if(applications.length===0){
-            return res.status(404).json({message:"No applications found",success:false})
-        }   
-        return res.status(200).json({message:"Applications found",applications,success:true})
+        return res.status(200).json({message: applications.length ? "Applications found" : "No applications yet",applications,success:true})
     }catch (error) {
         console.error(error)
         return res.status(500).json({ message: "Internal server error", success: false })
@@ -150,8 +148,8 @@ export const getApplicants = async (req, res) => {
 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      message: "Internal server error",
+    return res.status(statusFromError(error)).json({
+      message: error.message || "Internal server error",
       success: false
     });
   }
@@ -168,7 +166,7 @@ export const rerankApplicantsController = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    return res.status(statusFromError(error)).json({
       message: error.message || "Internal server error",
       success: false
     });

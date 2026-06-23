@@ -19,6 +19,7 @@ const Profile = () => {
     const { user } = useSelector(store => store.auth);
     const [analysis, setAnalysis] = useState({})
     const [isAnalyzing, setIsAnalyzing] = useState(false)
+    const [jobDescription, setJobDescription] = useState('')
     const [recommendedJobs, setRecommendedJobs] = useState([])
     const [savedJobs, setSavedJobs] = useState([])
 
@@ -54,7 +55,9 @@ const Profile = () => {
         if (isAnalyzing) return;
         try {
             setIsAnalyzing(true)
-            const res=await axios.get(`${AI_API_END_POINT}/analyzeResume`,{
+            const res=await axios.post(`${AI_API_END_POINT}/analyzeResume`,{
+                jobDescription: jobDescription.trim() || undefined
+            },{
                 withCredentials:true
             })
             const data=res.data;
@@ -169,6 +172,13 @@ const Profile = () => {
 
                                 </div>
                             </div>
+                             <textarea
+                                value={jobDescription}
+                                onChange={(e) => setJobDescription(e.target.value)}
+                                placeholder='Paste a job description to analyze your resume against it (optional)'
+                                className='w-full text-sm border border-gray-200 rounded-lg p-3 my-3 resize-none focus:outline-none focus:ring-1 focus:ring-emerald-400'
+                                rows={3}
+                            />
                             <div>
                                {isAnalyzing && (
                                    <div className="mt-6 bg-gray-50 border border-gray-200 rounded-xl p-6 space-y-4 animate-pulse">
@@ -184,7 +194,7 @@ const Profile = () => {
 
     <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
       <StarsIcon className="h-5 w-5 text-emerald-600" />
-      Resume Analysis
+      {(analysis.matchedRequirements?.length > 0 || analysis.missingRequirements?.length > 0) ? "Resume Analysis (vs. Job Description)" : "Resume Analysis"}
     </h2>
 
     {/* Summary */}
@@ -215,6 +225,30 @@ const Profile = () => {
         <h3 className="text-sm font-semibold text-gray-700 mb-2">Areas to Improve</h3>
         <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
           {analysis.weaknesses.map((item, idx) => (
+            <li key={idx}>{item}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* Matched Requirements */}
+    {analysis.matchedRequirements?.length > 0 && (
+      <div>
+        <h3 className="text-sm font-semibold text-emerald-700 mb-2">Matched Requirements</h3>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
+          {analysis.matchedRequirements.map((item, idx) => (
+            <li key={idx}>{item}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* Missing Requirements */}
+    {analysis.missingRequirements?.length > 0 && (
+      <div>
+        <h3 className="text-sm font-semibold text-red-700 mb-2">Missing Requirements</h3>
+        <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
+          {analysis.missingRequirements.map((item, idx) => (
             <li key={idx}>{item}</li>
           ))}
         </ul>

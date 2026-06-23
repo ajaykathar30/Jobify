@@ -5,17 +5,17 @@ const isAuth=async(req ,res,next)=>{
      try{
         const token=req.cookies.token
         if(!token){
-            return res.status(400).json({message:"Please Login/Signup ",success:false})
+            return res.status(401).json({message:"Please Login/Signup ",success:false})
         }
         const decode=jwt.verify(token,process.env.SECRET_KEY)
         if(!decode){
-            return res.status(400).json({message:"invalid token ",success:false})
+            return res.status(401).json({message:"invalid token ",success:false})
         }
         req.id=decode.userID
         next()
      }catch(error){
         console.error(error)
-    return res.status(500).json({ message: "Internal server error", success: false })
+    return res.status(401).json({ message: "Invalid or expired token", success: false })
 
      }
 }

@@ -9,7 +9,7 @@ export const registerCompany = async (req, res) => {
             return res.status(400).json({ message: "Company name is required", success: false })
         }
         if (company) {
-            return res.status(400).json({ message: "You cant register same company ", success: false })
+            return res.status(409).json({ message: "You cant register same company ", success: false })
         }
         company = await Company.create({
             name: companyName,
@@ -29,7 +29,7 @@ export const getCompany = async (req, res) => {
         const userId=req.id
         const companies=await Company.find({userId})
         if(!companies){
-            return res.status(400).json({message:"No company registered ! ! "})
+            return res.status(404).json({message:"No company registered ! ! ",success:false})
         }
         return res.status(200).json({message:"companies found successfully ",companies,success:true})
 
@@ -44,7 +44,7 @@ export const getCompanyById = async (req, res) => {
         const companyId=req.params.id
         const company=await Company.findById(companyId)
         if(!company){
-            return res.status(400).json({message:"No company registered ! ! "})
+            return res.status(404).json({message:"No company registered ! ! ",success:false})
         }
         return res.status(200).json({message:"company found  ",company,success:true})
 
@@ -77,7 +77,7 @@ export const updateCompany = async (req, res) => {
         const updatedData={name,description,website,location,logo:cloudResponse?.secure_url}
         const company=await Company.findByIdAndUpdate(companyId,updatedData,{new:true})
         if(!company){
-            return res.status(404).json({message:"No company registered ! ! "})
+            return res.status(404).json({message:"No company registered ! ! ",success:false})
         }
 
         return res.status(200).json({message:"company info updated",company,success:true})
